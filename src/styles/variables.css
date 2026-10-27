@@ -1,0 +1,53 @@
+:root {
+  /* Colors */
+  --color-bg-base: #f5efe6;
+  --color-bg-surface: #ede5d8;
+  --color-bg-card: rgba(255, 255, 255, 0.65);
+
+  /* Deep Midnight Navy for Typography */
+  --color-navy-dark: #0c1a30;
+  --color-navy-mid: #173250;
+  --color-navy-light: #25476a;
+
+  /* Amber & Gold Accents */
+  --color-amber-primary: #d48b28;
+  --color-amber-glow: #e8a238;
+  --color-gold-accent: #d4af37;
+
+  /* Botanical Accents */
+  --color-leaf-green: #385e3c;
+  --color-citrus-orange: #e87a1e;
+  --color-citrus-lemon: #e6be31;
+
+  /* Typography Colors */
+  --color-text-primary: #121824;
+  --color-text-secondary: #5a544c;
+  --color-text-muted: #888177;
+
+  /* Borders & Dividers */
+  --color-border-subtle: rgba(0, 0, 0, 0.08);
+  --color-border-dark: #12141a;
+
+  /* Typography */
+  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-display: 'Cinzel', 'Playfair Display', serif;
+  --font-didone: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
+  /* Transitions */
+  --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}

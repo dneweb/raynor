@@ -1,0 +1,22 @@
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-didone {
+  font-family: var(--font-didone);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Big Navy Typography Gradient matching reference */
+.text-navy-gradient {
+  background: linear-gradient(180deg, #0b1a30 0%, #16304d 48%, #274b6f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

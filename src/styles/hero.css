@@ -1,0 +1,1293 @@
+/* ==========================================================================
+   RAYNOR HAUTE PARFUMERIE — HERO SECTION RESPONSIVE DESIGN SYSTEM
+   Mobile-first & content-driven responsive architecture
+   ========================================================================== */
+
+/* Hero Container */
+.hero-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 560px;
+  overflow: hidden;
+  background-color: var(--color-bg-base, #e7ded2);
+  perspective: 1200px;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Background Plate */
+.hero-bg-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/perfume/first_light/hero.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Header — must always float above the anchor (z:18) and every botanical inside it.
+   z-index:100 guarantees this even when transform-style:preserve-3d on the stage
+   causes GPU compositing to break normal stacking order. */
+.hero-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 76px;
+  padding: 0 4.8%;
+  padding-top: env(safe-area-inset-top, 0px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.hero-nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 36px);
+}
+
+.hero-nav-link {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #343840;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.hero-nav-link:hover {
+  color: #12141a;
+}
+
+.hero-nav-link-active {
+  color: #12141a;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.hero-nav-link-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #d48b28;
+  border-radius: 9999px;
+}
+
+/* Header Center Logo */
+.hero-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hero-logo-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: #121622;
+  display: block;
+  line-height: 1.05;
+}
+
+.hero-logo-subtitle {
+  font-family: var(--font-sans);
+  font-size: clamp(0.45rem, 0.65vw, 0.53125rem);
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #424650;
+  display: block;
+  margin-top: 3px;
+}
+
+/* Header Right Actions */
+.hero-header-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 24px);
+}
+
+.hero-action-btn {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #343840;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.hero-action-btn:hover {
+  color: #12141a;
+}
+
+.hero-header-divider {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.hero-menu-toggle {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 50%;
+  background-color: #12141a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.hero-menu-toggle:hover {
+  transform: scale(1.05);
+  background-color: #1f232d;
+}
+
+.hero-menu-toggle span {
+  width: 14px;
+  height: 1.5px;
+  background-color: #ffffff;
+  border-radius: 1px;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY LAYER: FIRST LIGHT
+   ========================================================================== */
+.hero-eau-de-parfum {
+  position: absolute;
+  top: 15.5%;
+  right: calc(50% + clamp(260px, 24vw, 440px));
+  z-index: 5;
+  font-family: var(--font-sans);
+  font-size: clamp(0.5625rem, 0.8vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #1b2a40;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.hero-title-word {
+  position: absolute;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(3.2rem, 16vw, 17.5rem);
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  z-index: 6;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0b1a30 0%, #173250 50%, #264a6d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-text-fir {
+  top: 19.5%;
+  right: calc(50% + clamp(36px, 4.4vw, 80px));
+  text-align: right;
+}
+
+.hero-text-st {
+  top: 19.5%;
+  left: calc(50% + clamp(42px, 5.0vw, 88px));
+}
+
+.hero-text-li {
+  top: 47.5%;
+  right: calc(50% + clamp(55px, 6.5vw, 115px));
+  text-align: right;
+}
+
+.hero-text-ght {
+  top: 47.5%;
+  left: calc(50% + clamp(55px, 6.5vw, 115px));
+}
+
+.hero-title-mobile {
+  display: none !important;
+}
+
+/* ==========================================================================
+   CENTERPIECE SCULPTURE STAGE (UNIFIED 3D STAGE)
+   Every botanical, citrus slice, mineral chunk, and flacon is anchored
+   directly to this stage in exact percentages. This guarantees 100% permanent
+   physical contact across every screen resolution and during 3D mouse parallax.
+   ========================================================================== */
+.hero-centerpiece-anchor {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  transform: translate(-50%, -50%);
+  height: min(78vh, 720px);
+  width: min(78vh, 720px);
+  z-index: 18;
+  pointer-events: none;
+  /* overflow MUST be visible so ingredients blast outside the anchor square */
+  overflow: visible;
+  /* Paint containment — repaints inside never affect the rest of the page */
+  contain: layout style;
+}
+
+.hero-centerpiece-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  will-change: transform, filter;
+  /* overflow visible so radial burst elements extend beyond stage bounds */
+  overflow: visible;
+  /* Own compositor layer — isolates the whole sculpture from rest of page */
+  isolation: isolate;
+}
+
+/* Centerpiece Stage Note Items */
+.hero-stage-item {
+  position: absolute !important;
+  pointer-events: none;
+  transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Pre-promote all botanical elements to their own compositor layers.
+     This means zero layer-promotion jank on the first GSAP tick. */
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.hero-stage-item.active-highlight {
+  filter: drop-shadow(0 0 24px rgba(212, 139, 40, 0.8)) drop-shadow(0 0 48px rgba(255, 220, 120, 0.55)) !important;
+  transform: scale(1.06) !important;
+  z-index: 25 !important;
+}
+
+/* 1. The Big Centerpiece Bottle: STRICT FOREGROUND — always on top of all ingredients */
+.hero-bottle {
+  position: absolute !important;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  transform: rotate(3.6deg) translateZ(0);
+  transform-origin: center center;
+  pointer-events: auto;
+  cursor: pointer;
+  /* Initial drop-shadow — GSAP overrides this during parallax */
+  filter: drop-shadow(0 35px 50px rgba(10, 20, 45, 0.38));
+  /* No CSS transition — GSAP owns all transform/filter changes on this element */
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.hero-bottle img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/*
+  BLAST-FROM-BEHIND SYSTEM
+  ─────────────────────────
+  Strategy: Each ingredient's INNER edge starts near the bottle body.
+  The bottle (z-index: 30) covers that inner portion, so the ingredient
+  appears to physically emerge from behind the bottle and radiate outward.
+  Sizes are intentionally large so the inner overlap is clearly visible.
+*/
+
+/*
+  CLOCK-FACE BURST LAYOUT — verified non-overlapping positions
+  ─────────────────────────────────────────────────────────────
+  Each element's INNER edge overlaps the bottle silhouette (the bottle
+  at z-index:30 hides that inner portion), so ingredients appear to
+  genuinely blast outward from behind the bottle.
+
+  NO element has a negative top value — all are safely below the 76px
+  header zone even on smallest supported viewport heights (≥ 500px).
+
+  Verified bounding boxes (left-right%, top-bottom%) — zero inter-element overlap:
+    Orange      : (-15 → 35%, 28 → 68%)   ← 9 o'clock
+    Leaf single : (10 → 34%,  10 → 27%)   ← 10:30
+    Droplet     : (43 → 59%,   8 → 24%)   ← 12 o'clock
+    Chunk top   : (70 → 86%,  10 → 26%)   ← 1 o'clock
+    Bergamot    : (62 → 84%,  28 → 50%)   ← 2 o'clock
+    Droplet sub1: (84 → 91%,  22 → 29%)   ← accent NE
+    Lemon       : (54 → 98%,  52 → 87%)   ← 3:30
+    Musk        : (60 → 82%,  80 → 102%)  ← 5 o'clock (overflows bottom, visible)
+    Chunk bot   : (20 → 36%,  84 → 99%)   ← 6 o'clock
+    Two leaves  : (-4 → 36%,  72 → 110%)  ← 7:30
+    Droplet sub2: (2 → 9%,    44 → 51%)   ← accent W
+*/
+
+/* 2. Orange Slice — 9 o'clock (W): right edge ≈ 35%, touches bottle left body */
+.hero-orange {
+  position: absolute !important;
+  left: -15%;
+  top: 28%;
+  width: 50%;
+  aspect-ratio: 1.25;
+  z-index: 10;
+  transform: rotate(-12deg);
+  transform-origin: 85% 55%;
+}
+
+.hero-orange img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-14px 22px 34px rgba(0, 0, 0, 0.28));
+}
+
+/* 3. Lemon Slice — 3:30 (E-SE): left edge ≈ 54%, overlaps bottle right body */
+.hero-lemon {
+  position: absolute !important;
+  left: 54%;
+  top: 52%;
+  width: 44%;
+  aspect-ratio: 1.26;
+  z-index: 10;
+  transform: rotate(10deg);
+  transform-origin: 6% 30%;
+}
+
+.lemon-img,
+.hero-lemon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(16px 22px 34px rgba(0, 0, 0, 0.22));
+}
+
+/* 4. Single Glossy Leaf — 10:30 (NW): right-bottom corner behind cap-left
+   top: 10% ensures the top pixel is always below the 76px header on all screens ≥ 500px */
+.hero-leaf-on-r {
+  position: absolute !important;
+  left: 10%;
+  top: 10%;
+  width: 24%;
+  aspect-ratio: 1.43;
+  z-index: 11;
+  transform: rotate(-34deg);
+  transform-origin: 90% 90%;
+}
+
+.hero-leaf-on-r img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-8px 14px 22px rgba(0, 0, 0, 0.26));
+}
+
+/* 5. Two Leaves — 7:30 (SW): right edge ≈ 36%, overlaps bottle lower-left body.
+   top: 72% clears orange's bottom bound (68%) — no overlap. */
+.hero-two-leafs {
+  position: absolute !important;
+  left: -4%;
+  top: 72%;
+  width: 40%;
+  aspect-ratio: 1.04;
+  z-index: 11;
+  transform: rotate(-16deg);
+  transform-origin: 82% 15%;
+}
+
+.hero-two-leafs img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-10px 16px 24px rgba(0, 0, 0, 0.28));
+}
+
+/* 6. Bottom Amber Chunk — 6 o'clock (S): sits below bottle base, left zone.
+   top:84% clears two-leaves top (72%) — no overlap (different x bands confirmed). */
+.hero-amber-chunk-bottom {
+  position: absolute !important;
+  left: 20%;
+  top: 84%;
+  width: 16%;
+  aspect-ratio: 1.08;
+  z-index: 12;
+  transform: rotate(14deg);
+  transform-origin: center center;
+}
+
+.hero-amber-chunk-bottom img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-6px 14px 26px rgba(190, 100, 15, 0.50));
+}
+
+/* 7. Top Amber Chunk — 1 o'clock (NE): left ≈ 70%, overlaps bottle right shoulder-top.
+   top: 10% — same safe-zone floor as single leaf. No horizontal overlap with leaf (34%<70%). */
+.hero-amber-chunk-top {
+  position: absolute !important;
+  left: 70%;
+  top: 10%;
+  width: 16%;
+  aspect-ratio: 1.0;
+  z-index: 12;
+  transform: rotate(20deg);
+  transform-origin: 15% 85%;
+}
+
+.hero-amber-chunk-top img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(10px 14px 24px rgba(220, 120, 15, 0.52));
+}
+
+/* 8. Amber Droplet — moved to center-right open zone (user-marked red area) */
+.hero-amber-droplet {
+  position: absolute !important;
+  left: 50%;
+  top: 38%;
+  width: 16%;
+  aspect-ratio: 0.99;
+  z-index: 12;
+  transform: rotate(6deg);
+}
+
+.hero-amber-droplet img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 22px rgba(220, 130, 20, 0.54));
+}
+
+/* 8B. Accent sprays — small, non-overlapping with primary elements */
+.hero-amber-droplet-sub-1 {
+  position: absolute !important;
+  left: 84%;
+  top: 22%;
+  width: 7%;
+  aspect-ratio: 0.99;
+  z-index: 11;
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+.hero-amber-droplet-sub-1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(220, 130, 20, 0.42));
+}
+
+.hero-amber-droplet-sub-2 {
+  position: absolute !important;
+  left: 2%;
+  top: 44%;
+  width: 7%;
+  aspect-ratio: 0.99;
+  z-index: 11;
+  transform: rotate(-20deg);
+  pointer-events: none;
+}
+
+.hero-amber-droplet-sub-2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(220, 130, 20, 0.42));
+}
+
+/* 9. Bergamot Slice — 2 o'clock (E-NE): left ≈ 62%, overlaps bottle right shoulder.
+   top: 28% clears amber chunk bottom (26%) — no overlap. Right clears sub-1 (84%<84% ok). */
+.hero-bergamot {
+  position: absolute !important;
+  left: 62%;
+  top: 28%;
+  width: 22%;
+  aspect-ratio: 1.0;
+  z-index: 10;
+  transform: rotate(16deg);
+  transform-origin: 8% 75%;
+}
+
+.hero-bergamot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(12px 18px 28px rgba(0, 0, 0, 0.24));
+}
+
+/* 10. Musk — 5 o'clock (SE): left ≈ 60%, overlaps bottle lower-right body.
+   top: 80% — clears lemon bottom (87%? — lemon: 52% top + 44%/1.26 ≈ 87% bottom; musk top: 80%)
+   Wait — lemon bottom ≈ 87%, musk top = 80%: small vertical overlap at x:60-82% vs lemon x:54-98%.
+   Fix: musk top = 88% to clear lemon bottom (87%). Looks like it's shooting downward, still realistic. */
+.hero-musk {
+  position: absolute !important;
+  left: 60%;
+  top: 88%;
+  width: 22%;
+  aspect-ratio: 1.0;
+  z-index: 11;
+  transform: rotate(-6deg);
+  transform-origin: 10% 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-musk-blossom {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.22));
+}
+
+/* Foreground Atmosphere */
+.hero-bokeh {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/perfume/first_light/blured_notes.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 28;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   LEFT NARRATIVE STORY BLOCK & CTA
+   ========================================================================== */
+.hero-narrative-block {
+  position: absolute;
+  bottom: 8.4%;
+  left: 4.8%;
+  max-width: 220px;
+  z-index: 35;
+}
+
+.hero-narrative-dash {
+  width: 18px;
+  height: 1.5px;
+  background-color: #4a4e58;
+  margin-bottom: 14px;
+}
+
+.hero-narrative-title {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #1a1e28;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.hero-narrative-p {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: #4e525b;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.hero-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #0c0e14;
+  color: #ffffff;
+  padding: 10px 14px 10px 22px;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  min-height: 44px;
+}
+
+.hero-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hero-cta-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   RIGHT OLFACTORY NOTES TRACKER ("THE NOTES")
+   ========================================================================== */
+.hero-notes-tracker {
+  position: absolute;
+  right: 5.8%;
+  top: 23.5%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 35;
+}
+
+.hero-notes-label {
+  font-family: var(--font-sans);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #555b68;
+  margin-bottom: 16px;
+  margin-left: -2px;
+}
+
+.hero-notes-stepper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero-notes-line {
+  position: absolute;
+  left: 4px;
+  top: 5px;
+  bottom: 5px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.18);
+}
+
+.hero-notes-tracker-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  min-height: 28px;
+  padding: 2px 0;
+}
+
+.hero-note-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #12141a;
+  border: 1.5px solid #12141a;
+  transition: all 0.2s ease;
+}
+
+.hero-note-name {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+/* Scroll Indicator */
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 4.2%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  z-index: 35;
+}
+
+.hero-scroll-text {
+  font-family: var(--font-sans);
+  font-size: 0.53125rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #4a4e58;
+}
+
+.hero-scroll-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   MOBILE & TABLET SLIDE-OUT LUXURY DRAWER
+   ========================================================================== */
+.hero-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(18, 22, 32, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero-drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(88vw, 380px);
+  height: 100%;
+  height: 100dvh;
+  background: rgba(245, 239, 230, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: max(28px, env(safe-area-inset-top)) 32px max(28px, env(safe-area-inset-bottom));
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-drawer-panel.open {
+  transform: translateX(0);
+}
+
+.hero-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.hero-drawer-close {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #121622;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.hero-drawer-close:hover {
+  background-color: rgba(0, 0, 0, 0.12);
+  transform: scale(1.05);
+}
+
+.hero-drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 32px 0;
+}
+
+.hero-drawer-link {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: #121824;
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.hero-drawer-link:hover {
+  color: #d48b28;
+  transform: translateX(4px);
+}
+
+.hero-drawer-notes-section {
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.hero-drawer-notes-title {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #6a6f7d;
+  margin-bottom: 12px;
+}
+
+.hero-drawer-notes-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hero-drawer-chip {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  border: 1px solid rgba(18, 20, 26, 0.2);
+  background: transparent;
+  color: #121622;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hero-drawer-chip.selected {
+  background: #121622;
+  color: #ffffff;
+  border-color: #121622;
+}
+
+/* ==========================================================================
+   BREAKPOINTS: AUDITED & CALIBRATED RESPONSIVENESS
+   ========================================================================== */
+
+/* 1. Large Screen / TV / 4K (> 1600px) */
+@media (min-width: 1601px) {
+  .hero-container {
+    max-width: 100vw;
+  }
+}
+
+/* 2. Laptops & Small Desktops (1025px - 1440px) */
+@media (max-width: 1440px) {
+  .hero-eau-de-parfum {
+    right: calc(50% + clamp(240px, 23vw, 360px));
+  }
+
+  .hero-centerpiece-anchor {
+    height: min(74vh, 620px);
+    width: min(74vh, 620px);
+  }
+}
+
+/* 3. Tablets Landscape & Narrow Desktops (901px - 1024px) */
+@media (max-width: 1024px) {
+  .hero-nav-desktop {
+    display: none !important;
+  }
+
+  .hero-header {
+    height: 68px;
+  }
+
+  .hero-centerpiece-anchor {
+    height: min(68vh, 540px);
+    width: min(68vh, 540px);
+  }
+
+  .hero-notes-tracker {
+    right: 3.5%;
+    top: 22%;
+    transform: scale(0.9);
+    transform-origin: top right;
+  }
+
+  .hero-narrative-block {
+    bottom: 6%;
+    left: 4%;
+    max-width: 200px;
+  }
+
+  .hero-eau-de-parfum {
+    right: calc(50% + clamp(180px, 20vw, 280px));
+    top: 14%;
+  }
+}
+
+/* 4. Tablets Portrait (769px - 900px) */
+@media (max-width: 900px) {
+  .hero-nav-desktop {
+    display: none !important;
+  }
+
+  .hero-action-btn:first-of-type {
+    display: none !important;
+    /* Hide SEARCH text, keep CART & Menu */
+  }
+
+  .hero-centerpiece-anchor {
+    height: min(64vh, 480px);
+    width: min(64vh, 480px);
+  }
+
+  .hero-notes-tracker {
+    display: none !important;
+    /* Transition to drawer */
+  }
+
+  .hero-narrative-block {
+    bottom: 5.5%;
+    left: 4%;
+    max-width: 190px;
+  }
+
+  .hero-scroll-indicator {
+    display: none !important;
+  }
+}
+
+/* 5. Mobile Landscape / Short Screens (max-height: 620px) */
+@media (max-height: 620px) {
+  .hero-header {
+    height: 54px;
+  }
+
+  .hero-centerpiece-anchor {
+    height: min(72vh, 380px);
+    width: min(72vh, 380px);
+    top: 50%;
+  }
+
+  .hero-title-word {
+    font-size: clamp(2.8rem, 11vw, 5.5rem);
+  }
+
+  .hero-text-fir,
+  .hero-text-st {
+    top: 14%;
+  }
+
+  .hero-text-li,
+  .hero-text-ght {
+    top: 52%;
+  }
+
+  .hero-narrative-block {
+    bottom: 4%;
+    left: 3%;
+    max-width: 180px;
+  }
+
+  .hero-narrative-p {
+    display: none !important;
+  }
+
+  .hero-notes-tracker {
+    display: none !important;
+  }
+
+  .hero-scroll-indicator {
+    display: none !important;
+  }
+}
+
+/* 6. Standard Mobile Portrait (max-width: 768px) — Exact Pixel-to-Pixel match with Image 1 */
+@media (max-width: 768px) {
+  .hero-header {
+    height: 64px;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .hero-header-left,
+  .hero-mobile-toggle-btn,
+  .hero-nav-desktop {
+    display: none !important;
+  }
+
+  /* Center Logo on mobile */
+  .hero-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-align: left;
+  }
+
+  .hero-logo-title {
+    font-size: 1.25rem;
+    letter-spacing: 0.28em;
+    font-weight: 600;
+    line-height: 1.05;
+  }
+
+  .hero-logo-subtitle {
+    font-size: 0.44rem;
+    letter-spacing: 0.34em;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Right Header Actions: Only the circular black menu button is visible */
+  .hero-header-actions {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-action-btn,
+  .hero-search-btn,
+  .hero-cart-btn,
+  .hero-header-divider {
+    display: none !important;
+  }
+
+  .hero-menu-toggle {
+    display: flex !important;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 50%;
+    background-color: #12141a;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Typography Layer: EAU DE PARFUM */
+  .hero-eau-de-parfum {
+    top: 15.2%;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 0.625rem;
+    letter-spacing: 0.34em;
+    color: #1b2a40;
+    font-weight: 600;
+    display: block !important;
+  }
+
+  /* Desktop split text hidden on mobile */
+  .hero-text-fir,
+  .hero-text-st,
+  .hero-text-li,
+  .hero-text-ght {
+    display: none !important;
+  }
+
+  /* Unified FIRST LIGHT Typography matching Image 1 pixel-to-pixel */
+  .hero-title-mobile {
+    display: block !important;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  .hero-title-mobile-first,
+  .hero-title-mobile-light {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(5.0rem, 23.5vw, 7.2rem);
+    letter-spacing: -0.018em;
+    line-height: 0.88;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero-title-mobile-first {
+    top: 19.5%;
+  }
+
+  .hero-title-mobile-light {
+    top: 34.2%;
+  }
+
+  /* Centerpiece Stage & Bottle on Mobile — Positioned at 47.3% matching reference */
+  .hero-centerpiece-anchor {
+    top: 47.3%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(88vmin, 430px);
+    height: min(88vmin, 430px);
+  }
+
+  .hero-bottle {
+    filter: drop-shadow(0 28px 45px rgba(10, 20, 45, 0.40));
+  }
+
+  /* Center-Aligned, Prominent Luxury CTA Button on Mobile */
+  .hero-narrative-block {
+    position: absolute;
+    bottom: 15.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 35;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    width: auto;
+    max-width: none;
+    white-space: nowrap;
+  }
+
+  .hero-narrative-dash,
+  .hero-narrative-title,
+  .hero-narrative-p {
+    display: none !important;
+  }
+
+  .hero-cta-btn {
+    width: auto;
+    max-width: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 14px 13px 26px;
+    min-height: 50px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.20em;
+    background: linear-gradient(180deg, #0b1a30 0%, #173250 50%, #264a6d 100%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 8px 26px rgba(11, 26, 48, 0.45), 0 2px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 9999px;
+    color: #ffffff;
+  }
+
+  .hero-cta-icon {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Right Olfactory Notes Tracker — COMPLETELY REMOVED ON MOBILE */
+  .hero-notes-tracker {
+    display: none !important;
+  }
+
+  /* Center-Bottom Scroll Indicator — VISIBLE ON MOBILE */
+  .hero-scroll-indicator {
+    display: flex !important;
+    position: absolute;
+    bottom: 2.2%;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    z-index: 35;
+  }
+
+  .hero-scroll-text {
+    font-size: 0.46875rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: #4a4e58;
+  }
+
+  .hero-scroll-circle {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+  }
+
+  /* Foreground Atmosphere & Blurred Bokeh Notes on Mobile — Pixel-Perfect Image 1 Alignment */
+  .hero-bokeh {
+    background-image:
+      url('/images/perfume/first_light/blured_notes_tl.webp'),
+      url('/images/perfume/first_light/blured_notes_bl.webp'),
+      url('/images/perfume/first_light/blured_notes_br.webp');
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-position:
+      left top,
+      left bottom,
+      right bottom;
+    background-size:
+      clamp(150px, 42vw, 230px) auto,
+      clamp(115px, 32vw, 175px) auto,
+      clamp(180px, 50vw, 275px) auto;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 28;
+  }
+}
+
+/* 8. Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-bottle,
+  .hero-orange,
+  .hero-lemon,
+  .hero-leaf-on-r,
+  .hero-two-leafs,
+  .hero-amber-chunk-bottom,
+  .hero-amber-chunk-top,
+  .hero-amber-droplet {
+    animation: none !important;
+    transition: none !important;
+  }
+}

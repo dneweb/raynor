@@ -1,0 +1,90 @@
+/* ==========================================================================
+   RAYNOR HAUTE PARFUMERIE — LUXURY CURTAIN REVEAL LOADER
+   Dual black curtains parting left & right, transparent root, 0 middle line
+   ========================================================================== */
+
+.curtain-loader-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 999999;
+  pointer-events: all;
+  overflow: hidden;
+  user-select: none;
+  background: transparent !important; /* CRITICAL: Transparent root so parting curtains reveal the website underneath */
+}
+
+/* Dual Curtain Panels — Pure Solid Obsidian Black with ZERO Middle Line */
+.curtain-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.2vw;
+  height: 100%;
+  background-color: #000000;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  z-index: 1;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important; /* STRICTLY zero golden line, zero inset shadow */
+}
+
+.curtain-panel-left {
+  left: 0;
+}
+
+.curtain-panel-right {
+  right: 0;
+}
+
+/* Centered Logo Stage */
+.curtain-logo-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+  padding: 20px;
+}
+
+/* Logo Wrapper: Hardware-Accelerated Smooth Scaling */
+.curtain-logo-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0) scale(0.35);
+  opacity: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.curtain-logo-image {
+  width: min(520px, 86vw);
+  max-width: 520px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  image-rendering: -webkit-optimize-contrast;
+  transform: translateZ(0);
+}
+
+
+@media (max-width: 768px) {
+  .curtain-logo-image {
+    width: min(360px, 88vw);
+    max-width: 360px;
+  }
+}

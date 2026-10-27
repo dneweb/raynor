@@ -1,0 +1,15 @@
+@import './variables.css';
+@import './reset.css';
+@import './typography.css';
+@import './hero.css';
+
+/* Full Bleed Viewport Container for Hero Section */
+.hero-viewport {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 650px;
+  overflow: hidden;
+  background-color: var(--color-bg-base);
+  user-select: none;
+}
