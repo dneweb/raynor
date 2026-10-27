@@ -432,12 +432,12 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Center Slot: Brand Logo */}
-        <a href="#home" className="hero-logo" aria-label="Raynor Haute Parfumerie Home">
-          <SunburstIcon size={30} />
-          <div>
-            <span className="hero-logo-title">RAYNOR</span>
-            <span className="hero-logo-subtitle">THE ESSENCE OF LUXURY</span>
-          </div>
+        <a href="#home" className="hero-logo" aria-label="RAYNOR — The Essence of Luxury">
+          <img
+            src="/images/header-logo.webp"
+            alt="RAYNOR — The Essence of Luxury"
+            className="hero-logo-img"
+          />
         </a>
 
         {/* Right Slot: Actions */}

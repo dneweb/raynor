@@ -93,34 +93,27 @@
 .hero-logo {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
-  gap: 12px;
-  text-align: left;
+  justify-content: center;
   text-decoration: none;
   cursor: pointer;
+  z-index: 10;
 }
 
-.hero-logo-title {
-  font-family: var(--font-serif);
-  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  color: #121622;
+.hero-logo-img {
+  height: clamp(56px, 4.5vw, 70px);
+  width: auto;
+  max-width: clamp(200px, 17vw, 250px);
+  object-fit: contain;
   display: block;
-  line-height: 1.05;
+  transition: opacity var(--transition-fast, 0.25s ease), transform var(--transition-fast, 0.25s ease);
 }
 
-.hero-logo-subtitle {
-  font-family: var(--font-sans);
-  font-size: clamp(0.45rem, 0.65vw, 0.53125rem);
-  font-weight: 600;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: #424650;
-  display: block;
-  margin-top: 3px;
+.hero-logo:hover .hero-logo-img {
+  opacity: 0.88;
 }
 
 /* Header Right Actions */
@@ -1058,25 +1051,16 @@
   .hero-logo {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
-    gap: 9px;
-    text-align: left;
+    justify-content: center;
   }
 
-  .hero-logo-title {
-    font-size: 1.25rem;
-    letter-spacing: 0.28em;
-    font-weight: 600;
-    line-height: 1.05;
-  }
-
-  .hero-logo-subtitle {
-    font-size: 0.44rem;
-    letter-spacing: 0.34em;
-    font-weight: 600;
-    margin-top: 2px;
+  .hero-logo-img {
+    height: clamp(38px, 9.5vw, 48px);
+    max-width: 165px;
   }
 
   /* Right Header Actions: Only the circular black menu button is visible */
