@@ -603,7 +603,7 @@
   position: absolute;
   bottom: 8.4%;
   left: 4.8%;
-  max-width: 220px;
+  max-width: 320px;
   z-index: 35;
 }
 
@@ -632,41 +632,51 @@
   color: #4e525b;
   font-weight: 400;
   margin-bottom: 20px;
+  max-width: 240px;
 }
 
 .hero-cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  background-color: #0c0e14;
+  gap: 16px;
+  background: linear-gradient(180deg, #0b1a30 0%, #173250 50%, #264a6d 100%);
   color: #ffffff;
-  padding: 10px 14px 10px 22px;
+  padding: 13px 16px 13px 26px;
   border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   font-family: var(--font-sans);
-  font-size: 0.625rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
-  border: none;
+  white-space: nowrap;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  min-height: 44px;
+  box-shadow: 0 8px 26px rgba(11, 26, 48, 0.42), 0 2px 6px rgba(0, 0, 0, 0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  min-height: 52px;
 }
 
 .hero-cta-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 14px 34px rgba(11, 26, 48, 0.52), 0 4px 10px rgba(0, 0, 0, 0.22);
+  border-color: rgba(255, 255, 255, 0.38);
 }
 
 .hero-cta-icon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.hero-cta-btn:hover .hero-cta-icon {
+  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.16);
 }
 
 /* ==========================================================================
