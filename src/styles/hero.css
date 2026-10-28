@@ -1039,7 +1039,7 @@
 /* 6. Standard Mobile Portrait (max-width: 768px) — Exact Pixel-to-Pixel match with Image 1 */
 @media (max-width: 768px) {
   .hero-header {
-    height: 64px;
+    height: 70px;
     padding: 0 5%;
     display: flex;
     align-items: center;
@@ -1069,8 +1069,8 @@
   }
 
   .hero-logo-img {
-    height: clamp(38px, 9.5vw, 48px);
-    max-width: 165px;
+    height: clamp(50px, 13vw, 62px);
+    max-width: clamp(180px, 50vw, 220px);
   }
 
   /* Right Header Actions: Only the circular black menu button is visible */
