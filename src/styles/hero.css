@@ -109,11 +109,21 @@
   max-width: clamp(200px, 17vw, 250px);
   object-fit: contain;
   display: block;
-  transition: opacity var(--transition-fast, 0.25s ease), transform var(--transition-fast, 0.25s ease);
+  filter: drop-shadow(0 1px 1.5px rgba(18, 22, 34, 0.45))
+          drop-shadow(0 3px 8px rgba(35, 25, 12, 0.22))
+          contrast(1.18)
+          brightness(0.94);
+  transition: opacity var(--transition-fast, 0.25s ease),
+              transform var(--transition-fast, 0.25s ease),
+              filter var(--transition-fast, 0.25s ease);
 }
 
 .hero-logo:hover .hero-logo-img {
-  opacity: 0.88;
+  opacity: 0.95;
+  filter: drop-shadow(0 2px 3px rgba(18, 22, 34, 0.52))
+          drop-shadow(0 5px 12px rgba(35, 25, 12, 0.28))
+          contrast(1.22)
+          brightness(0.96);
 }
 
 /* Header Right Actions */
