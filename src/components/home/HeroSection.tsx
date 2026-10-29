@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
-import { ArrowRight, ChevronDown, X, ShoppingBag, Sparkles, Check } from 'lucide-react'
+import { X, ShoppingBag, Sparkles, Check, ArrowRight } from 'lucide-react'
 import { useAudioExperience } from '../../hooks/useAudioExperience'
+import { HeroSlide } from './HeroSlide'
 
 // Safe lag-smoothing: clamp jumps when returning from background tabs without timeline breakdown
 gsap.ticker.lagSmoothing(500, 33)
@@ -46,41 +47,88 @@ const SunburstIcon: React.FC<{ size?: number }> = ({ size = 28 }) => {
   )
 }
 
-export const HeroSection: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null)
+const perfumesData = [
+  {
+    id: 'first_light' as const,
+    name: 'FIRST LIGHT',
+    badge: 'SLIDE 01 / 02 • FIRST LIGHT',
+    title: (
+      <>
+        A RADIANT
+        <br />
+        BEGINNING
+      </>
+    ),
+    description:
+      'A vibrant blend of citrus and warm amber, First Light captures the energy of new beginnings.',
+    cta: 'EXPLORE FIRST LIGHT',
+    bottleImg: '/images/perfume/first_light/bottle.webp',
+    flaconTitle: 'First Light Eau de Parfum',
+    flaconDesc:
+      'Sun-drenched Mediterranean citrus, crisp Italian bergamot & warm solar amber crystal.',
+    notes: [
+      { name: 'Bergamot' },
+      { name: 'Orange' },
+      { name: 'Mandarin' },
+      { name: 'Lemon' },
+      { name: 'Amber' },
+      { name: 'Musk' },
+    ],
+  },
+  {
+    id: 'after_glow' as const,
+    name: 'AFTER GLOW',
+    badge: 'SLIDE 02 / 02 • AFTER GLOW',
+    title: (
+      <>
+        WARM EMBRACE
+        <br />
+        OF DUSK
+      </>
+    ),
+    description:
+      'An intoxicating warmth of rosewood, rich patchouli, and spiced cinnamon bathed in golden amber.',
+    cta: 'EXPLORE AFTER GLOW',
+    bottleImg: '/images/perfume/after_glow/bottle.webp',
+    flaconTitle: 'After Glow Eau de Parfum',
+    flaconDesc:
+      'Spiced Ceylon cinnamon, velvety herbal sage, smoky rosewood & rich patchouli in solar amber.',
+    notes: [
+      { name: 'Lemon' },
+      { name: 'Sage' },
+      { name: 'Rosewood' },
+      { name: 'Amber' },
+      { name: 'Patchouli' },
+      { name: 'Cinnamon' },
+    ],
+  },
+]
 
-  // Layer Refs for GSAP Parallax & Floating Animations
-  const textFirRef = useRef<HTMLDivElement>(null)
-  const textStRef = useRef<HTMLDivElement>(null)
-  const textLiRef = useRef<HTMLDivElement>(null)
-  const textGhtRef = useRef<HTMLDivElement>(null)
-  const centerpieceRef = useRef<HTMLDivElement>(null)
-  const orangeRef = useRef<HTMLDivElement>(null)
-  const lemonRef = useRef<HTMLDivElement>(null)
-  const leafOnRRef = useRef<HTMLDivElement>(null)
-  const twoLeafsRef = useRef<HTMLDivElement>(null)
-  const amberChunkRef = useRef<HTMLDivElement>(null)
-  const amberChunk2Ref = useRef<HTMLDivElement>(null)
-  const amberDropletRef = useRef<HTMLDivElement>(null)
-  const bergamotRef = useRef<HTMLDivElement>(null)
-  const muskRef = useRef<HTMLDivElement>(null)
-  const bottleRef = useRef<HTMLDivElement>(null)
-  const bokehRef = useRef<HTMLDivElement>(null)
+export const HeroSection: React.FC = () => {
+  const heroContainerRef = useRef<HTMLDivElement>(null)
+  const movingTrackRef = useRef<HTMLDivElement>(null)
+
+  // Sub-wrappers for depth parallax between typography and bottle stage
+  const slide1StageWrapRef = useRef<HTMLDivElement>(null)
+  const slide1TitleWrapRef = useRef<HTMLDivElement>(null)
+  const slide2StageWrapRef = useRef<HTMLDivElement>(null)
+  const slide2TitleWrapRef = useRef<HTMLDivElement>(null)
 
   const { playSpritz, playVelvetClick, playGoldChime } = useAudioExperience()
+
+  // State
+  const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const currentSlideRef = useRef<number>(0)
+  const isAnimatingRef = useRef<boolean>(false)
+
   const [activeNote, setActiveNote] = useState<string>('Amber')
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
   const [cartCount, setCartCount] = useState<number>(1)
+  const [drawerActiveNote, setDrawerActiveNote] = useState<string>('Amber')
 
-  const notesList = [
-    { name: 'Bergamot' },
-    { name: 'Orange' },
-    { name: 'Mandarin' },
-    { name: 'Lemon' },
-    { name: 'Amber' },
-    { name: 'Musk' },
-  ]
+  const currentPerfume = perfumesData[currentSlide]
+  const notesList = currentPerfume.notes
 
   // Keyboard navigation for accessible drawers
   useEffect(() => {
@@ -94,308 +142,183 @@ export const HeroSection: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
+  // ─────────────────────────────────────────────────────────────────────────
+  // FAST HORIZONTAL ON-SCROLL SLIDE SWITCHING
+  // Animates ONLY the name "FIRST LIGHT" / "AFTER GLOW" and the bottle + floating elements
+  // ─────────────────────────────────────────────────────────────────────────
+  const goToSlide = useCallback(
+    (targetIndex: number) => {
+      if (isAnimatingRef.current || targetIndex === currentSlideRef.current) return
+      isAnimatingRef.current = true
+      currentSlideRef.current = targetIndex
+      setCurrentSlide(targetIndex)
+      playVelvetClick()
 
-    if (prefersReducedMotion) return
-
-    const ctx = gsap.context(() => {
-      // 1. Centerpiece Stage Zero-G idle floating
-      gsap.to(centerpieceRef.current, {
-        y: '-=9',
-        duration: 4.8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      })
-
-      // 2. Contact-anchored micro-breathing (organic wind motion)
-      gsap.to(orangeRef.current, {
-        rotation: '+=0.8',
-        duration: 5.2,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.2,
-      })
-
-      gsap.to(lemonRef.current, {
-        rotation: '-=0.7',
-        duration: 4.8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.5,
-      })
-
-      gsap.to(leafOnRRef.current, {
-        rotation: '+=1.2',
-        duration: 4.0,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.1,
-      })
-
-      gsap.to(bergamotRef.current, {
-        rotation: '+=0.9',
-        duration: 4.6,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.4,
-      })
-
-      gsap.to(amberDropletRef.current, {
-        y: '-=5',
-        x: '+=2',
-        duration: 3.4,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.3,
-      })
-
-      gsap.to(twoLeafsRef.current, {
-        rotation: '-=0.9',
-        duration: 5.0,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.6,
-      })
-
-      gsap.to(amberChunk2Ref.current, {
-        rotation: '+=0.6',
-        duration: 4.2,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.5,
-      })
-
-      gsap.to(muskRef.current, {
-        rotation: '-=0.5',
-        duration: 4.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.7,
-      })
-    }, containerRef)
-
-    // Smooth Mouse Movement Parallax (Desktop / Fine pointers)
-    const isFinePointer = window.matchMedia('(pointer: fine)').matches
-    let rafId = 0
-    let latestMouseX = 0
-    let latestMouseY = 0
-
-    const dispatchParallax = () => {
-      const { innerWidth: width, innerHeight: height } = window
-      const normX = (latestMouseX / width - 0.5) * 2
-      const normY = (latestMouseY / height - 0.5) * 2
-
-      // DEPTH PLANE 1: BOTANICAL LAYER (far plane)
-      if (centerpieceRef.current) {
-        gsap.to(centerpieceRef.current, {
-          x: normX * 8,
-          y: normY * 6,
-          rotationY: normX * 4,
-          rotationX: -normY * 3,
-          duration: 1.4,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        })
+      // Ensure active note is relevant to the target perfume
+      const targetPerfumeNotes = perfumesData[targetIndex].notes.map((n) => n.name)
+      if (!targetPerfumeNotes.includes(activeNote)) {
+        setActiveNote('Amber')
       }
 
-      // DEPTH PLANE 2: BOTTLE LAYER (near plane)
-      if (bottleRef.current) {
-        gsap.to(bottleRef.current, {
-          x: normX * 22,
-          y: normY * 16,
-          rotationY: normX * 6,
-          rotationX: -normY * 5,
-          filter: `drop-shadow(${-normX * 18}px ${38 - normY * 12}px 52px rgba(10, 20, 45, 0.42))`,
-          duration: 0.9,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        })
-      }
+      const targetX = targetIndex === 0 ? 0 : -window.innerWidth
 
-      // BACKGROUND: Typography counter-drift
-      ;[textFirRef, textStRef, textLiRef, textGhtRef].forEach(({ current: el }) => {
-        if (el) {
-          gsap.to(el, {
-            x: -normX * 8,
-            y: -normY * 6,
-            duration: 1.4,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          })
+      const tl = gsap.timeline({
+        defaults: { duration: 0.62, ease: 'power2.inOut' },
+        onComplete: () => {
+          isAnimatingRef.current = false
+        },
+      })
+
+      // 1. Fast horizontal slide of moving track (typography + centerpiece stage)
+      tl.to(
+        movingTrackRef.current,
+        {
+          x: targetX,
+        },
+        0
+      )
+
+      // 2. Multi-plane depth parallax: bottle & floating elements move with slight offset
+      if (targetIndex === 1) {
+        if (slide1StageWrapRef.current) {
+          tl.to(slide1StageWrapRef.current, { x: -85 }, 0)
         }
-      })
+        if (slide2StageWrapRef.current) {
+          tl.fromTo(slide2StageWrapRef.current, { x: 85 }, { x: 0 }, 0)
+        }
+        if (slide1TitleWrapRef.current) {
+          tl.to(slide1TitleWrapRef.current, { x: -40 }, 0)
+        }
+        if (slide2TitleWrapRef.current) {
+          tl.fromTo(slide2TitleWrapRef.current, { x: 40 }, { x: 0 }, 0)
+        }
+      } else {
+        if (slide2StageWrapRef.current) {
+          tl.to(slide2StageWrapRef.current, { x: 85 }, 0)
+        }
+        if (slide1StageWrapRef.current) {
+          tl.fromTo(slide1StageWrapRef.current, { x: -85 }, { x: 0 }, 0)
+        }
+        if (slide2TitleWrapRef.current) {
+          tl.to(slide2TitleWrapRef.current, { x: 40 }, 0)
+        }
+        if (slide1TitleWrapRef.current) {
+          tl.fromTo(slide1TitleWrapRef.current, { x: -40 }, { x: 0 }, 0)
+        }
+      }
+    },
+    [activeNote, playVelvetClick]
+  )
 
-      rafId = 0
-    }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      latestMouseX = e.clientX
-      latestMouseY = e.clientY
-      if (rafId === 0) {
-        rafId = requestAnimationFrame(dispatchParallax)
+  // Responsive alignment on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (movingTrackRef.current) {
+        gsap.set(movingTrackRef.current, {
+          x: currentSlideRef.current === 1 ? -window.innerWidth : 0,
+        })
       }
     }
-
-    if (isFinePointer) {
-      window.addEventListener('mousemove', handleMouseMove, { passive: true })
-    }
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      if (rafId) cancelAnimationFrame(rafId)
-      ctx.revert()
-    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   // ─────────────────────────────────────────────────────────────────────────
-  // BOTANICAL BURST ENTRANCE ANIMATION & TAB-VISIBILITY GUARDIAN
+  // INSTANT SCROLL LISTENER: Even a slight scroll instantly switches slide
   // ─────────────────────────────────────────────────────────────────────────
   useEffect(() => {
-    const botanicals = [
-      { ref: orangeRef,       x: 80,   y: 0,    delay: 0.00 }, // W
-      { ref: lemonRef,        x: -80,  y: -40,  delay: 0.06 }, // E-SE
-      { ref: leafOnRRef,      x: 60,   y: 80,   delay: 0.03 }, // NW
-      { ref: twoLeafsRef,     x: 70,   y: -50,  delay: 0.09 }, // SW
-      { ref: amberChunk2Ref,  x: -70,  y: 70,   delay: 0.02 }, // NE
-      { ref: bergamotRef,     x: -80,  y: 40,   delay: 0.07 }, // E-NE
-      { ref: muskRef,         x: -50,  y: -60,  delay: 0.11 }, // SE
-      { ref: amberChunkRef,   x: 20,   y: -80,  delay: 0.05 }, // S
-      { ref: amberDropletRef, x: -30,  y: 60,   delay: 0.04 }, // center-right
-    ]
+    let accumulatedDelta = 0
+    let resetTimer: ReturnType<typeof setTimeout> | null = null
 
-    const showAllInstantly = () => {
-      botanicals.forEach(({ ref }) => {
-        if (ref.current) {
-          gsap.set(ref.current, {
-            opacity: 1,
-            scale: 1,
-            x: 0,
-            y: 0,
-            force3D: true,
-            clearProps: 'opacity,scale,x,y',
-          })
-        }
-      })
-    }
+    const handleWheel = (e: WheelEvent) => {
+      const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX
 
-    // 1. STATEFUL CHECK: If loader already finished (e.g. tab restored or re-render),
-    // NEVER hide botanicals! Show them instantly and exit.
-    const isLoaderAlreadyDone =
-      window.__RAYNOR_LOADER_DONE__ ||
-      document.documentElement.getAttribute('data-loader-done') === 'true'
+      accumulatedDelta += delta
 
-    if (isLoaderAlreadyDone) {
-      showAllInstantly()
-      return
-    }
+      if (resetTimer) clearTimeout(resetTimer)
+      resetTimer = setTimeout(() => {
+        accumulatedDelta = 0
+      }, 180)
 
-    // 2. Set initial hidden state only for initial first-time load
-    botanicals.forEach(({ ref }) => {
-      if (ref.current) {
-        gsap.set(ref.current, { opacity: 0, scale: 0.4, force3D: true })
+      // Scrolling down / swiping left just a bit (threshold: 16px) -> Next slide
+      if (accumulatedDelta > 16 && currentSlideRef.current === 0) {
+        accumulatedDelta = 0
+        goToSlide(1)
       }
-    })
-
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
-
-    if (prefersReducedMotion) {
-      const handler = () => showAllInstantly()
-      window.addEventListener('raynor:loader-done', handler, { once: true })
-      return () => window.removeEventListener('raynor:loader-done', handler)
-    }
-
-    const burstCtxRef = { current: null as gsap.Context | null }
-    let hasRevealed = false
-
-    const handleLoaderDone = () => {
-      if (hasRevealed) return
-      hasRevealed = true
-
-      burstCtxRef.current = gsap.context(() => {
-        const tl = gsap.timeline()
-
-        botanicals.forEach(({ ref, x, y, delay }) => {
-          if (!ref.current) return
-          tl.fromTo(
-            ref.current,
-            {
-              opacity: 0,
-              scale: 0.4,
-              x,
-              y,
-              force3D: true,
-            },
-            {
-              opacity: 1,
-              scale: 1,
-              x: 0,
-              y: 0,
-              duration: 1.1,
-              ease: 'power3.out',
-              force3D: true,
-              overwrite: 'auto',
-              clearProps: 'x,y,scale,opacity',
-            },
-            delay
-          )
-        })
-      })
-    }
-
-    window.addEventListener('raynor:loader-done', handleLoaderDone, { once: true })
-
-    // 3. Fallback Safety Guard: If after 4.2s the event was missed (e.g. background tab),
-    // automatically trigger reveal so botanicals are guaranteed never to stay hidden
-    const safetyTimer = setTimeout(() => {
-      if (!hasRevealed) {
-        handleLoaderDone()
-      }
-    }, 4200)
-
-    // 4. Tab Visibility Guardian: When switching back to this tab, verify botanicals are visible
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        const isDone =
-          window.__RAYNOR_LOADER_DONE__ ||
-          document.documentElement.getAttribute('data-loader-done') === 'true'
-        if (isDone || hasRevealed) {
-          showAllInstantly()
-        }
+      // Scrolling up / swiping right just a bit (threshold: -16px) -> Previous slide
+      else if (accumulatedDelta < -16 && currentSlideRef.current === 1) {
+        accumulatedDelta = 0
+        goToSlide(0)
       }
     }
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    window.addEventListener('wheel', handleWheel, { passive: true })
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+      if (resetTimer) clearTimeout(resetTimer)
+    }
+  }, [goToSlide])
+
+  // Touch swipe support for mobile
+  useEffect(() => {
+    let touchStartX = 0
+    let touchStartY = 0
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX
+      touchStartY = e.touches[0].clientY
+    }
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const diffX = touchStartX - e.changedTouches[0].clientX
+      const diffY = touchStartY - e.changedTouches[0].clientY
+      const dominantDelta = Math.abs(diffX) >= Math.abs(diffY) ? diffX : diffY
+
+      // Quick swipe threshold: 24px
+      if (dominantDelta > 24 && currentSlideRef.current === 0) {
+        goToSlide(1)
+      } else if (dominantDelta < -24 && currentSlideRef.current === 1) {
+        goToSlide(0)
+      }
+    }
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true })
+    window.addEventListener('touchend', handleTouchEnd, { passive: true })
 
     return () => {
-      window.removeEventListener('raynor:loader-done', handleLoaderDone)
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      clearTimeout(safetyTimer)
-      burstCtxRef.current?.revert()
+      window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [])
+  }, [goToSlide])
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') {
+        if (currentSlideRef.current === 0) goToSlide(1)
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        if (currentSlideRef.current === 1) goToSlide(0)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [goToSlide])
 
   return (
-    <div ref={containerRef} className="hero-container">
+    <div
+      ref={heroContainerRef}
+      className={`hero-container hero-active-slide-${currentSlide}`}
+      data-active-slide={currentSlide}
+    >
       {/* ========================================================
-          LAYER 0: BACKGROUND PLATE (hero.webp) — STATIC, NO PARALLAX
+          LAYER 0: STATIC BACKGROUND PLATE (Shared across slides)
+          Does NOT move on scroll
           ======================================================== */}
       <div className="hero-bg-plate" />
 
       {/* ========================================================
-          LAYER 1: TOP HEADER NAVIGATION (3-Column Symmetrical Grid)
+          LAYER 1: STATIC TOP HEADER NAVIGATION
+          Does NOT move on scroll
           ======================================================== */}
       <header className="hero-header">
         {/* Left Slot: Desktop Nav / Mobile Toggle Trigger */}
@@ -480,153 +403,45 @@ export const HeroSection: React.FC = () => {
       </header>
 
       {/* ========================================================
-          LAYER 2: BIG TYPOGRAPHY ("FIRST LIGHT" & "EAU DE PARFUM")
+          LAYERS 2-5: HORIZONTAL MOVING TRACK
+          ONLY THE NAME, THE BOTTLE AND THE FLOATING ELEMENTS MOVE
           ======================================================== */}
-      <div className="hero-eau-de-parfum">EAU DE PARFUM</div>
-      {/* Desktop split words for 3D mouse parallax */}
-      <div ref={textFirRef} className="hero-title-word hero-text-fir">
-        FIR
-      </div>
-      <div ref={textStRef} className="hero-title-word hero-text-st">
-        ST
-      </div>
-      <div ref={textLiRef} className="hero-title-word hero-text-li">
-        LI
-      </div>
-      <div ref={textGhtRef} className="hero-title-word hero-text-ght">
-        GHT
-      </div>
+      <div ref={movingTrackRef} className="hero-moving-track">
+        {/* SLIDE 1: FIRST LIGHT */}
+        <HeroSlide
+          slideIndex={0}
+          perfumeId="first_light"
+          activeNote={activeNote}
+          onSpritz={playSpritz}
+          stageWrapRef={slide1StageWrapRef}
+          titleWrapRef={slide1TitleWrapRef}
+        />
 
-      {/* Mobile unified typography: perfectly centered words matching Image 1 */}
-      <div className="hero-title-mobile" aria-hidden="true">
-        <div className="hero-title-word hero-title-mobile-first">FIRST</div>
-        <div className="hero-title-word hero-title-mobile-light">LIGHT</div>
+        {/* SLIDE 2: AFTER GLOW */}
+        <HeroSlide
+          slideIndex={1}
+          perfumeId="after_glow"
+          activeNote={activeNote}
+          onSpritz={playSpritz}
+          stageWrapRef={slide2StageWrapRef}
+          titleWrapRef={slide2TitleWrapRef}
+        />
       </div>
 
       {/* ========================================================
-          CENTERPIECE SCULPTURE STAGE (UNIFIED 3D STAGE)
+          LAYER 6: STATIC FOREGROUND BOKEH & BLURRED NOTES
+          Does NOT move on scroll
           ======================================================== */}
-      <div className="hero-centerpiece-anchor">
-        <div ref={centerpieceRef} className="hero-centerpiece-stage">
-          {/* Layer 3A: Two Leaves (Southwest Burst) */}
-          <div ref={twoLeafsRef} className="hero-stage-item hero-two-leafs">
-            <img src="/images/perfume/first_light/two_leafs.webp" alt="Citrus Botanical Leaves" />
-          </div>
-
-          {/* Layer 3B: Orange Slice (West Burst) */}
-          <div
-            ref={orangeRef}
-            className={`hero-stage-item hero-orange ${activeNote === 'Orange' ? 'active-highlight' : ''}`}
-          >
-            <img src="/images/perfume/first_light/orange.webp" alt="Sun-Drenched Bergamot Orange" />
-          </div>
-
-          {/* Layer 3C: Single Leaf (Northwest Burst) */}
-          <div ref={leafOnRRef} className="hero-stage-item hero-leaf-on-r">
-            <img src="/images/perfume/first_light/leaf.webp" alt="Glossy Citrus Leaf" />
-          </div>
-
-          {/* Layer 3D: Amber Droplet Splash */}
-          <div
-            ref={amberDropletRef}
-            className={`hero-stage-item hero-amber-droplet ${activeNote === 'Amber' ? 'active-highlight' : ''}`}
-          >
-            <img src="/images/perfume/first_light/amber_droplet.webp" alt="Amber Essence Droplet" />
-          </div>
-
-          {/* Layer 3E: Secondary Splash Accents */}
-          <div className="hero-stage-item hero-amber-droplet-sub-1">
-            <img src="/images/perfume/first_light/amber_droplet.webp" alt="Amber Droplet Accent" />
-          </div>
-          <div className="hero-stage-item hero-amber-droplet-sub-2">
-            <img src="/images/perfume/first_light/amber_droplet.webp" alt="Amber Droplet Accent" />
-          </div>
-
-          {/* Layer 3F: Top Amber Chunk (Northeast Burst) */}
-          <div
-            ref={amberChunk2Ref}
-            className={`hero-stage-item hero-amber-chunk-top ${activeNote === 'Amber' ? 'active-highlight' : ''}`}
-          >
-            <img src="/images/perfume/first_light/amber_chunk2.webp" alt="Golden Amber Crystal" />
-          </div>
-
-          {/* Layer 3G: Bergamot Citrus Slice (East-Northeast Burst) */}
-          <div
-            ref={bergamotRef}
-            className={`hero-stage-item hero-bergamot ${activeNote === 'Bergamot' ? 'active-highlight' : ''}`}
-          >
-            <img src="/images/perfume/first_light/bergamot.webp" alt="Fresh Italian Bergamot" />
-          </div>
-
-          {/* Layer 3H: Lemon Slice (East-Southeast Burst) */}
-          <div
-            ref={lemonRef}
-            className={`hero-stage-item hero-lemon ${activeNote === 'Lemon' ? 'active-highlight' : ''}`}
-          >
-            <img src="/images/perfume/first_light/lemon.webp" alt="Mediterranean Lemon Slice" />
-          </div>
-
-          {/* Layer 3I: White Cashmere Musk (Southeast Burst) */}
-          <div
-            ref={muskRef}
-            className={`hero-stage-item hero-musk ${activeNote === 'Musk' ? 'active-highlight' : ''}`}
-          >
-            <img
-              src="/images/perfume/first_light/musk_flower.webp"
-              alt="White Ambrette Musk Blossom"
-              className="hero-musk-blossom"
-            />
-          </div>
-
-          {/* Layer 3J: Amber Chunk at Bottom (South-Southwest Burst) */}
-          <div
-            ref={amberChunkRef}
-            className={`hero-stage-item hero-amber-chunk-bottom ${activeNote === 'Amber' ? 'active-highlight' : ''}`}
-          >
-            <img src="/images/perfume/first_light/amber_chunk.webp" alt="Warm Amber Resin Chunk" />
-          </div>
-
-          {/* ========================================================
-              FOREGROUND CENTERPIECE FLACON (STRICTLY IN FRONT)
-              ======================================================== */}
-          <div
-            ref={bottleRef}
-            className="hero-bottle"
-            onClick={playSpritz}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                playSpritz()
-              }
-            }}
-            aria-label="Experience First Light spray atomizer"
-            title="Click to experience First Light"
-          >
-            <img src="/images/perfume/first_light/bottle.webp" alt="RAYNOR First Light Flacon" />
-          </div>
-        </div>
-      </div>
+      <div className="hero-bokeh" />
 
       {/* ========================================================
-          LAYER 6: FOREGROUND BOKEH & ATMOSPHERE
-          ======================================================== */}
-      <div ref={bokehRef} className="hero-bokeh" />
-
-      {/* ========================================================
-          LAYER 7: LEFT NARRATIVE STORY BLOCK & CTA
+          LAYER 7: STATIC LEFT NARRATIVE STORY BLOCK & CTA
+          Does NOT move on scroll — Updates to active fragrance
           ======================================================== */}
       <div className="hero-narrative-block">
         <div className="hero-narrative-dash" />
-        <h4 className="hero-narrative-title">
-          A RADIANT
-          <br />
-          BEGINNING
-        </h4>
-        <p className="hero-narrative-p">
-          A vibrant blend of citrus and warm amber, First Light captures the energy of new beginnings.
-        </p>
+        <h4 className="hero-narrative-title">{currentPerfume.title}</h4>
+        <p className="hero-narrative-p">{currentPerfume.description}</p>
 
         <button
           className="hero-cta-btn"
@@ -635,9 +450,9 @@ export const HeroSection: React.FC = () => {
             playGoldChime()
             setIsCartOpen(true)
           }}
-          aria-label="Explore First Light and order"
+          aria-label={`Explore ${currentPerfume.name} and order`}
         >
-          <span>EXPLORE FIRST LIGHT</span>
+          <span>{currentPerfume.cta}</span>
           <span className="hero-cta-icon">
             <ArrowRight size={11} color="#ffffff" />
           </span>
@@ -645,8 +460,8 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* ========================================================
-          LAYER 8: RIGHT OLFACTORY NOTES TRACKER ("THE NOTES")
-          All dots are identical pure black dots
+          LAYER 8: STATIC RIGHT OLFACTORY NOTES TRACKER ("THE NOTES")
+          Does NOT move on scroll — Displays active fragrance notes
           ======================================================== */}
       <div className="hero-notes-tracker">
         <span className="hero-notes-label">
@@ -679,7 +494,14 @@ export const HeroSection: React.FC = () => {
                 }}
                 aria-label={`Select ${note.name} note`}
               >
-                <div className="hero-note-dot" />
+                <div
+                  className="hero-note-dot"
+                  style={{
+                    backgroundColor: isSelected ? '#d48b28' : '#12141a',
+                    borderColor: isSelected ? '#d48b28' : '#12141a',
+                    transform: isSelected ? 'scale(1.25)' : 'scale(1)',
+                  }}
+                />
                 <span
                   className="hero-note-name"
                   style={{
@@ -695,15 +517,7 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* ========================================================
-          LAYER 9: SCROLL INDICATOR
-          ======================================================== */}
-      <div className="hero-scroll-indicator">
-        <span className="hero-scroll-text">SCROLL</span>
-        <div className="hero-scroll-circle">
-          <ChevronDown size={11} color="#333742" />
-        </div>
-      </div>
+
 
       {/* ========================================================
           LAYER 10: LUXURY MOBILE SLIDE-OUT DRAWER
@@ -777,15 +591,18 @@ export const HeroSection: React.FC = () => {
           </nav>
 
           <div className="hero-drawer-notes-section">
-            <div className="hero-drawer-notes-title">EXPLORE THE NOTES</div>
+            <div className="hero-drawer-notes-title">
+              EXPLORE {currentPerfume.name} NOTES
+            </div>
             <div className="hero-drawer-notes-chips">
               {notesList.map((note) => {
-                const isSelected = activeNote === note.name
+                const isSelected = drawerActiveNote === note.name
                 return (
                   <button
                     key={note.name}
                     className={`hero-drawer-chip ${isSelected ? 'selected' : ''}`}
                     onClick={() => {
+                      setDrawerActiveNote(note.name)
                       setActiveNote(note.name)
                       playVelvetClick()
                     }}
@@ -823,10 +640,8 @@ export const HeroSection: React.FC = () => {
               SIGNATURE RELEASE
             </span>
           </div>
-          <div className="hero-drawer-product-title">First Light Eau de Parfum</div>
-          <p className="hero-drawer-product-desc">
-            Sun-drenched Mediterranean citrus, crisp Italian bergamot & warm solar amber crystal.
-          </p>
+          <div className="hero-drawer-product-title">{currentPerfume.flaconTitle}</div>
+          <p className="hero-drawer-product-desc">{currentPerfume.flaconDesc}</p>
           <div className="hero-drawer-product-action">
             <span className="hero-drawer-price">$285.00</span>
             <button
@@ -886,10 +701,10 @@ export const HeroSection: React.FC = () => {
 
           <div className="hero-cart-item">
             <div className="hero-cart-img-wrap">
-              <img src="/images/perfume/first_light/bottle.webp" alt="First Light Flacon" />
+              <img src={currentPerfume.bottleImg} alt={`${currentPerfume.name} Flacon`} />
             </div>
             <div className="hero-cart-item-info">
-              <div className="hero-cart-item-name">First Light Eau de Parfum</div>
+              <div className="hero-cart-item-name">{currentPerfume.flaconTitle}</div>
               <div className="hero-cart-item-meta">100ml / 3.4 FL. OZ. • Signature Flacon</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                 <Check size={12} color="#385e3c" />
@@ -955,7 +770,7 @@ export const HeroSection: React.FC = () => {
             className="hero-checkout-btn"
             onClick={() => {
               playGoldChime()
-              alert('Thank you for choosing Raynor Haute Parfumerie. Checkout is connecting...')
+              alert(`Thank you for choosing Raynor Haute Parfumerie. Checkout is connecting with ${currentPerfume.flaconTitle}...`)
             }}
           >
             <span>PROCEED TO CHECKOUT</span>

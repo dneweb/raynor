@@ -3,6 +3,14 @@
    Mobile-first & content-driven responsive architecture
    ========================================================================== */
 
+/* Outer scroll wrapper for GSAP pinned horizontal scroll */
+.hero-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /* Hero Container */
 .hero-container {
   position: relative;
@@ -16,6 +24,57 @@
   user-select: none;
   margin: 0;
   padding: 0;
+}
+
+/* Horizontal Moving Track: Holds ONLY the moving elements (Typography + Centerpiece Stage) */
+.hero-moving-track {
+  position: absolute;
+  inset: 0;
+  width: 200vw;
+  height: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: row;
+  pointer-events: none;
+  z-index: 15;
+  will-change: transform;
+}
+
+/* Individual Moving Slide Stage */
+.hero-slide-stage {
+  position: relative;
+  width: 100vw;
+  height: 100%;
+  height: 100dvh;
+  flex-shrink: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Parallax Wrappers inside Moving Slide for Depth on Horizontal Transition */
+.hero-slide-title-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 6;
+  will-change: transform;
+}
+
+.hero-slide-stage-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 18;
+  will-change: transform;
+}
+
+/* Allow clicks on the interactive bottle flacon */
+.hero-slide-stage .hero-bottle {
+  pointer-events: auto;
 }
 
 /* Background Plate */
@@ -251,6 +310,22 @@
 }
 
 /* ==========================================================================
+   AFTER GLOW TYPOGRAPHY (Deep Burgundy / Wine / Oxblood)
+   Exact match to reference image
+   ========================================================================== */
+.hero-slide-after_glow .hero-title-word,
+.hero-slide-after_glow .hero-title-mobile-first,
+.hero-slide-after_glow .hero-title-mobile-light {
+  background: linear-gradient(180deg, #2c0907 0%, #521613 48%, #852f28 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.hero-slide-after_glow .hero-eau-de-parfum {
+  color: #481210 !important;
+}
+
+/* ==========================================================================
    CENTERPIECE SCULPTURE STAGE (UNIFIED 3D STAGE)
    Every botanical, citrus slice, mineral chunk, and flacon is anchored
    directly to this stage in exact percentages. This guarantees 100% permanent
@@ -361,35 +436,104 @@
     Droplet sub2: (2 → 9%,    44 → 51%)   ← accent W
 */
 
-/* 2. Orange Slice — 9 o'clock (W): right edge ≈ 35%, touches bottle left body */
+/* ==========================================================================
+   FIRST LIGHT BOTANICAL INGREDIENTS LAYOUT
+   Masterpiece 6-Note Radial Burst Sculptural Composition
+   Matches Reference: Leaf (NW), Orange (W), Two Leaves (SW),
+                      Bergamot (NE), Lemon (E-SE), Amber (S-SW), Musk (S-SE)
+   ========================================================================== */
+
+/* 1. Mandarin Citrus Glossy Leaf — 11 o'clock (NW)
+   Emerging gracefully from behind bottle chrome left shoulder. */
+.hero-leaf-on-r {
+  position: absolute !important;
+  left: 9%;
+  top: -2%;
+  width: 35%;
+  aspect-ratio: 1.43;
+  z-index: 10;
+  transform: rotate(-18deg);
+  transform-origin: 85% 85%;
+}
+
+.hero-leaf-on-r img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-8px 16px 26px rgba(0, 0, 0, 0.28));
+}
+
+/* 2. Sun-Drenched Bergamot Orange Slice — 9:30 o'clock (W)
+   Nestled naturally behind the left waist with breathing room. */
 .hero-orange {
   position: absolute !important;
-  left: -15%;
+  left: -6%;
   top: 28%;
-  width: 50%;
+  width: 46%;
   aspect-ratio: 1.25;
-  z-index: 10;
-  transform: rotate(-12deg);
-  transform-origin: 85% 55%;
+  z-index: 9;
+  transform: rotate(-14deg);
+  transform-origin: 85% 45%;
 }
 
 .hero-orange img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(-14px 22px 34px rgba(0, 0, 0, 0.28));
+  filter: drop-shadow(-14px 20px 32px rgba(0, 0, 0, 0.26));
 }
 
-/* 3. Lemon Slice — 3:30 (E-SE): left edge ≈ 54%, overlaps bottle right body */
+/* 3. Two Botanical Citrus Leaves — 7:30 o'clock (SW)
+   Emerging from the lower-left flacon base. */
+.hero-two-leafs {
+  position: absolute !important;
+  left: 0%;
+  top: 58%;
+  width: 42%;
+  aspect-ratio: 1.04;
+  z-index: 11;
+  transform: rotate(-16deg);
+  transform-origin: 80% 25%;
+}
+
+.hero-two-leafs img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-10px 18px 28px rgba(0, 0, 0, 0.28));
+}
+
+/* 4. Crisp Italian Green Bergamot — 2 o'clock (NE)
+   Crisp vibrant green bergamot wheel rising behind upper right shoulder. */
+.hero-bergamot {
+  position: absolute !important;
+  left: 59%;
+  top: 12%;
+  width: 34%;
+  aspect-ratio: 1.0;
+  z-index: 10;
+  transform: rotate(16deg);
+  transform-origin: 15% 75%;
+}
+
+.hero-bergamot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(14px 18px 28px rgba(0, 0, 0, 0.24));
+}
+
+/* 5. Mediterranean Lemon Wheel — 4 o'clock (E-SE)
+   Luminous golden citrus wheel nestled on the right body. */
 .hero-lemon {
   position: absolute !important;
-  left: 54%;
-  top: 52%;
-  width: 44%;
+  left: 55%;
+  top: 46%;
+  width: 48%;
   aspect-ratio: 1.26;
-  z-index: 10;
-  transform: rotate(10deg);
-  transform-origin: 6% 30%;
+  z-index: 11;
+  transform: rotate(12deg);
+  transform-origin: 15% 35%;
 }
 
 .lemon-img,
@@ -397,59 +541,19 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(16px 22px 34px rgba(0, 0, 0, 0.22));
+  filter: drop-shadow(16px 22px 34px rgba(0, 0, 0, 0.24));
 }
 
-/* 4. Single Glossy Leaf — 10:30 (NW): right-bottom corner behind cap-left
-   top: 10% ensures the top pixel is always below the 76px header on all screens ≥ 500px */
-.hero-leaf-on-r {
-  position: absolute !important;
-  left: 10%;
-  top: 10%;
-  width: 24%;
-  aspect-ratio: 1.43;
-  z-index: 11;
-  transform: rotate(-34deg);
-  transform-origin: 90% 90%;
-}
-
-.hero-leaf-on-r img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(-8px 14px 22px rgba(0, 0, 0, 0.26));
-}
-
-/* 5. Two Leaves — 7:30 (SW): right edge ≈ 36%, overlaps bottle lower-left body.
-   top: 72% clears orange's bottom bound (68%) — no overlap. */
-.hero-two-leafs {
-  position: absolute !important;
-  left: -4%;
-  top: 72%;
-  width: 40%;
-  aspect-ratio: 1.04;
-  z-index: 11;
-  transform: rotate(-16deg);
-  transform-origin: 82% 15%;
-}
-
-.hero-two-leafs img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(-10px 16px 24px rgba(0, 0, 0, 0.28));
-}
-
-/* 6. Bottom Amber Chunk — 6 o'clock (S): sits below bottle base, left zone.
-   top:84% clears two-leaves top (72%) — no overlap (different x bands confirmed). */
+/* 6. Solar Golden Amber Resin Chunk — 6:30 o'clock (S-SW)
+   Warm crystalline amber resin grounded and clearly visible at the flacon base. */
 .hero-amber-chunk-bottom {
   position: absolute !important;
-  left: 20%;
-  top: 84%;
-  width: 16%;
+  left: 7%;
+  top: 80%;
+  width: 28%;
   aspect-ratio: 1.08;
   z-index: 12;
-  transform: rotate(14deg);
+  transform: rotate(-10deg);
   transform-origin: center center;
 }
 
@@ -457,117 +561,20 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(-6px 14px 26px rgba(190, 100, 15, 0.50));
+  filter: drop-shadow(0 10px 24px rgba(212, 139, 40, 0.55)) drop-shadow(6px 12px 20px rgba(0, 0, 0, 0.22));
 }
 
-/* 7. Top Amber Chunk — 1 o'clock (NE): left ≈ 70%, overlaps bottle right shoulder-top.
-   top: 10% — same safe-zone floor as single leaf. No horizontal overlap with leaf (34%<70%). */
-.hero-amber-chunk-top {
-  position: absolute !important;
-  left: 70%;
-  top: 10%;
-  width: 16%;
-  aspect-ratio: 1.0;
-  z-index: 12;
-  transform: rotate(20deg);
-  transform-origin: 15% 85%;
-}
-
-.hero-amber-chunk-top img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(10px 14px 24px rgba(220, 120, 15, 0.52));
-}
-
-/* 8. Amber Droplet — moved to center-right open zone (user-marked red area) */
-.hero-amber-droplet {
-  position: absolute !important;
-  left: 50%;
-  top: 38%;
-  width: 16%;
-  aspect-ratio: 0.99;
-  z-index: 12;
-  transform: rotate(6deg);
-}
-
-.hero-amber-droplet img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 12px 22px rgba(220, 130, 20, 0.54));
-}
-
-/* 8B. Accent sprays — small, non-overlapping with primary elements */
-.hero-amber-droplet-sub-1 {
-  position: absolute !important;
-  left: 84%;
-  top: 22%;
-  width: 7%;
-  aspect-ratio: 0.99;
-  z-index: 11;
-  transform: rotate(30deg);
-  pointer-events: none;
-}
-
-.hero-amber-droplet-sub-1 img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 6px 14px rgba(220, 130, 20, 0.42));
-}
-
-.hero-amber-droplet-sub-2 {
-  position: absolute !important;
-  left: 2%;
-  top: 44%;
-  width: 7%;
-  aspect-ratio: 0.99;
-  z-index: 11;
-  transform: rotate(-20deg);
-  pointer-events: none;
-}
-
-.hero-amber-droplet-sub-2 img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 6px 14px rgba(220, 130, 20, 0.42));
-}
-
-/* 9. Bergamot Slice — 2 o'clock (E-NE): left ≈ 62%, overlaps bottle right shoulder.
-   top: 28% clears amber chunk bottom (26%) — no overlap. Right clears sub-1 (84%<84% ok). */
-.hero-bergamot {
-  position: absolute !important;
-  left: 62%;
-  top: 28%;
-  width: 22%;
-  aspect-ratio: 1.0;
-  z-index: 10;
-  transform: rotate(16deg);
-  transform-origin: 8% 75%;
-}
-
-.hero-bergamot img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(12px 18px 28px rgba(0, 0, 0, 0.24));
-}
-
-/* 10. Musk — 5 o'clock (SE): left ≈ 60%, overlaps bottle lower-right body.
-   top: 80% — clears lemon bottom (87%? — lemon: 52% top + 44%/1.26 ≈ 87% bottom; musk top: 80%)
-   Wait — lemon bottom ≈ 87%, musk top = 80%: small vertical overlap at x:60-82% vs lemon x:54-98%.
-   Fix: musk top = 88% to clear lemon bottom (87%). Looks like it's shooting downward, still realistic. */
+/* 7. White Cashmere Musk Blossom — 5:30 o'clock (S-SE)
+   Delicate white ambrette blossom grounded and clearly visible at the base corner. */
 .hero-musk {
   position: absolute !important;
-  left: 60%;
-  top: 88%;
-  width: 22%;
+  left: 62%;
+  top: 79%;
+  width: 28%;
   aspect-ratio: 1.0;
-  z-index: 11;
-  transform: rotate(-6deg);
-  transform-origin: 10% 10%;
+  z-index: 12;
+  transform: rotate(6deg);
+  transform-origin: center center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -580,6 +587,135 @@
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.22));
+}
+
+/* ==========================================================================
+   AFTER GLOW BOTANICAL INGREDIENTS LAYOUT
+   Masterpiece 6-Note Radial Burst Sculptural Composition
+   Matches Reference: Sage (NW), Lemon (W), Cinnamon (SW),
+                      Rosewood (NE), Patchouli (SE), Amber (S-SE)
+   ========================================================================== */
+
+/* 1. Velvet Sage Leaves — 11 o'clock (NW)
+   Emerging gracefully from behind bottle left shoulder and black flacon cap. */
+.hero-afterglow-sage {
+  position: absolute !important;
+  left: 6%;
+  top: -4%;
+  width: 42%;
+  aspect-ratio: 1.5;
+  z-index: 10;
+  transform: rotate(-12deg);
+  transform-origin: 85% 85%;
+}
+
+.hero-afterglow-sage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scaleX(-1);
+  filter: drop-shadow(-8px 16px 26px rgba(0, 0, 0, 0.28));
+}
+
+/* 2. Mediterranean Lemon Slice — 9:30 o'clock (W)
+   Nestled between Sage and Cinnamon on the left waist with breathing room. */
+.hero-afterglow-lemon {
+  position: absolute !important;
+  left: -5%;
+  top: 28%;
+  width: 45%;
+  aspect-ratio: 1.5;
+  z-index: 9;
+  transform: rotate(-16deg);
+  transform-origin: 85% 45%;
+}
+
+.hero-afterglow-lemon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-14px 20px 32px rgba(0, 0, 0, 0.26));
+}
+
+/* 3. Spiced Ceylon Cinnamon Sticks — 7:30 o'clock (SW)
+   Emerging from the lower-left flacon base.
+   Rolled ends face lower-left, sticks angle up towards bottle. */
+.hero-afterglow-cinnamon {
+  position: absolute !important;
+  left: -3%;
+  top: 56%;
+  width: 48%;
+  aspect-ratio: 1.5;
+  z-index: 11;
+  transform: rotate(24deg);
+  transform-origin: 80% 30%;
+}
+
+.hero-afterglow-cinnamon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-12px 18px 28px rgba(0, 0, 0, 0.32));
+}
+
+/* 4. Smoked Velvet Rosewood Bark — 2 o'clock (NE)
+   Majestic architectural bark rising behind right shoulder. */
+.hero-afterglow-rosewood {
+  position: absolute !important;
+  left: 55%;
+  top: 8%;
+  width: 52%;
+  aspect-ratio: 1.5;
+  z-index: 10;
+  transform: rotate(16deg);
+  transform-origin: 15% 75%;
+}
+
+.hero-afterglow-rosewood img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(16px 22px 34px rgba(0, 0, 0, 0.30));
+}
+
+/* 5. Aromatic Dark Patchouli — 4:30 o'clock (SE)
+   Lush green leaves with delicate purple blossoms at the lower right. */
+.hero-afterglow-patchouli {
+  position: absolute !important;
+  left: 55%;
+  top: 51%;
+  width: 48%;
+  aspect-ratio: 1.5;
+  z-index: 11;
+  transform: rotate(-6deg);
+  transform-origin: 15% 35%;
+}
+
+.hero-afterglow-patchouli img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(14px 18px 28px rgba(0, 0, 0, 0.28));
+}
+
+/* 6. Luminous Amber Resin Crystal — 5:30 o'clock (S-SE)
+   Warm golden crystalline chunk clearly visible at the base corner. */
+.hero-afterglow-amber {
+  position: absolute !important;
+  left: 62%;
+  top: 77%;
+  width: 28%;
+  aspect-ratio: 1.46;
+  z-index: 12;
+  transform: rotate(10deg);
+  transform-origin: center center;
+}
+
+.hero-afterglow-amber img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 24px rgba(212, 139, 40, 0.55)) drop-shadow(8px 14px 22px rgba(0, 0, 0, 0.26));
 }
 
 /* Foreground Atmosphere */
@@ -679,6 +815,17 @@
   background: rgba(255, 255, 255, 0.16);
 }
 
+/* After Glow Slide Matching CTA Theme */
+.hero-active-slide-1 .hero-cta-btn {
+  background: linear-gradient(180deg, #2c0907 0%, #521613 50%, #852f28 100%) !important;
+  box-shadow: 0 8px 26px rgba(44, 9, 7, 0.45), 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+.hero-active-slide-1 .hero-cta-btn:hover {
+  background: linear-gradient(180deg, #3d0c0a 0%, #681c18 50%, #9e362e 100%) !important;
+  box-shadow: 0 14px 34px rgba(44, 9, 7, 0.55), 0 4px 10px rgba(0, 0, 0, 0.25) !important;
+}
+
 /* ==========================================================================
    RIGHT OLFACTORY NOTES TRACKER ("THE NOTES")
    ========================================================================== */
@@ -746,37 +893,7 @@
   transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
-/* Scroll Indicator */
-.hero-scroll-indicator {
-  position: absolute;
-  bottom: 4.2%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  z-index: 35;
-}
 
-.hero-scroll-text {
-  font-family: var(--font-sans);
-  font-size: 0.53125rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #4a4e58;
-}
-
-.hero-scroll-circle {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 /* ==========================================================================
    MOBILE & TABLET SLIDE-OUT LUXURY DRAWER
@@ -1232,32 +1349,7 @@
     display: none !important;
   }
 
-  /* Center-Bottom Scroll Indicator — VISIBLE ON MOBILE */
-  .hero-scroll-indicator {
-    display: flex !important;
-    position: absolute;
-    bottom: 2.2%;
-    left: 50%;
-    transform: translateX(-50%);
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    z-index: 35;
-  }
 
-  .hero-scroll-text {
-    font-size: 0.46875rem;
-    font-weight: 600;
-    letter-spacing: 0.3em;
-    color: #4a4e58;
-  }
-
-  .hero-scroll-circle {
-    width: 17px;
-    height: 17px;
-    border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-  }
 
   /* Foreground Atmosphere & Blurred Bokeh Notes on Mobile — Pixel-Perfect Image 1 Alignment */
   .hero-bokeh {
@@ -1289,8 +1381,12 @@
   .hero-leaf-on-r,
   .hero-two-leafs,
   .hero-amber-chunk-bottom,
-  .hero-amber-chunk-top,
-  .hero-amber-droplet {
+  .hero-afterglow-sage,
+  .hero-afterglow-lemon,
+  .hero-afterglow-cinnamon,
+  .hero-afterglow-rosewood,
+  .hero-afterglow-patchouli,
+  .hero-afterglow-amber {
     animation: none !important;
     transition: none !important;
   }

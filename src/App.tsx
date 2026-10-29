@@ -6,7 +6,7 @@ export default function App() {
   return (
     <>
       <CurtainLoader />
-      <main style={{ minHeight: '100vh', backgroundColor: '#f5efe6', overflowX: 'hidden' }}>
+      <main style={{ minHeight: '100vh', backgroundColor: '#f5efe6' }}>
         <HeroSection />
       </main>
     </>
