@@ -1,9 +1,10 @@
-import { luxuryAudio } from '../utils/audioSynth'
-
+/**
+ * Audio experience hook (Sound effects removed)
+ */
 export function useAudioExperience() {
   return {
-    playSpritz: () => luxuryAudio.playSpritz(),
-    playGoldChime: () => luxuryAudio.playGoldChime(),
-    playVelvetClick: () => luxuryAudio.playVelvetClick(),
+    playSpritz: () => {},
+    playGoldChime: () => {},
+    playVelvetClick: () => {},
   }
 }

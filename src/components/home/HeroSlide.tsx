@@ -5,7 +5,7 @@ interface HeroSlideProps {
   slideIndex: number
   perfumeId: 'first_light' | 'after_glow'
   activeNote: string
-  onSpritz: () => void
+  isActive?: boolean
   stageWrapRef?: React.RefObject<HTMLDivElement | null>
   titleWrapRef?: React.RefObject<HTMLDivElement | null>
 }
@@ -14,7 +14,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
   slideIndex,
   perfumeId,
   activeNote,
-  onSpritz,
+  isActive = slideIndex === 0,
   stageWrapRef,
   titleWrapRef,
 }) => {
@@ -44,6 +44,16 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
   const sageRef = useRef<HTMLDivElement>(null)
   const patchouliRef = useRef<HTMLDivElement>(null)
   const rosewoodRef = useRef<HTMLDivElement>(null)
+
+  // Guard flags and animation context refs for entrance burst & parallax synchronization
+  const isBurstingRef = useRef(false)
+  const hasRevealedRef = useRef(false)
+  const burstCtxRef = useRef<gsap.Context | null>(null)
+  const isActiveRef = useRef(isActive)
+
+  useEffect(() => {
+    isActiveRef.current = isActive
+  }, [isActive])
 
   // ─────────────────────────────────────────────────────────────────────────
   // ZERO-G FLOATING IDLE ANIMATIONS
@@ -191,6 +201,14 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
     let latestMouseY = 0
 
     const dispatchParallax = () => {
+      const isLoaderReady =
+        window.__RAYNOR_LOADER_DONE__ ||
+        document.documentElement.getAttribute('data-loader-done') === 'true'
+      if (!isActiveRef.current || !isLoaderReady || isBurstingRef.current) {
+        rafId = 0
+        return
+      }
+
       const { innerWidth: width, innerHeight: height } = window
       const normX = (latestMouseX / width - 0.5) * 2
       const normY = (latestMouseY / height - 0.5) * 2
@@ -281,7 +299,29 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
             { ref: rosewoodRef,     x: -40,  y: -50,  delay: 0.08 },
           ]
 
+    const setHiddenState = () => {
+      if (bottleRef.current) {
+        gsap.set(bottleRef.current, { opacity: 0, scale: 0.82, y: 40, force3D: true })
+      }
+      botanicals.forEach(({ ref, x, y }) => {
+        if (ref.current) {
+          gsap.set(ref.current, { opacity: 0, scale: 0.4, x, y, force3D: true })
+        }
+      })
+    }
+
     const showAllInstantly = () => {
+      isBurstingRef.current = false
+      if (bottleRef.current) {
+        gsap.set(bottleRef.current, {
+          opacity: 1,
+          scale: 1,
+          x: 0,
+          y: 0,
+          force3D: true,
+          clearProps: 'opacity,scale,x,y',
+        })
+      }
       botanicals.forEach(({ ref }) => {
         if (ref.current) {
           gsap.set(ref.current, {
@@ -296,39 +336,63 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
       })
     }
 
-    const isLoaderAlreadyDone =
-      window.__RAYNOR_LOADER_DONE__ ||
-      document.documentElement.getAttribute('data-loader-done') === 'true'
-
-    // If loader finished or this is the second slide, display instantly ready
-    if (isLoaderAlreadyDone || slideIndex > 0) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) {
       showAllInstantly()
       return
     }
 
-    // Slide 0: Set initial hidden state until curtain loader done
-    botanicals.forEach(({ ref }) => {
-      if (ref.current) {
-        gsap.set(ref.current, { opacity: 0, scale: 0.4, force3D: true })
+    // When slide is not active: prime offscreen after slide exit completes
+    if (!isActive) {
+      if (!hasRevealedRef.current) {
+        setHiddenState()
+      } else {
+        const offscreenTimer = setTimeout(() => {
+          setHiddenState()
+        }, 700)
+        return () => clearTimeout(offscreenTimer)
       }
-    })
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) {
-      const handler = () => showAllInstantly()
-      window.addEventListener('raynor:loader-done', handler, { once: true })
-      return () => window.removeEventListener('raynor:loader-done', handler)
+      return
     }
 
-    const burstCtxRef = { current: null as gsap.Context | null }
-    let hasRevealed = false
+    // Now isActive is true
+    const isLoaderAlreadyDone =
+      window.__RAYNOR_LOADER_DONE__ ||
+      document.documentElement.getAttribute('data-loader-done') === 'true'
 
-    const handleLoaderDone = () => {
-      if (hasRevealed) return
-      hasRevealed = true
+    const playBurst = (startDelay = 0) => {
+      isBurstingRef.current = true
+      hasRevealedRef.current = true
 
+      burstCtxRef.current?.revert()
       burstCtxRef.current = gsap.context(() => {
-        const tl = gsap.timeline()
+        const tl = gsap.timeline({
+          delay: startDelay,
+          onComplete: () => {
+            isBurstingRef.current = false
+          },
+        })
+
+        // 1. Centerpiece Bottle Flacon Burst (rises and blooms into the foreground)
+        if (bottleRef.current) {
+          tl.fromTo(
+            bottleRef.current,
+            { opacity: 0, scale: 0.82, y: 40, force3D: true },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 1.25,
+              ease: 'power3.out',
+              force3D: true,
+              overwrite: 'auto',
+              clearProps: 'opacity,scale,y',
+            },
+            0
+          )
+        }
+
+        // 2. Botanical ingredients radial burst outward
         botanicals.forEach(({ ref, x, y, delay }) => {
           if (!ref.current) return
           tl.fromTo(
@@ -351,10 +415,27 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
       })
     }
 
+    // If curtain loader is already complete (e.g. user scrolled to After Glow, or navigated back),
+    // trigger the burst with a 0.08s glide offset so elements blossom right in center stage
+    if (isLoaderAlreadyDone) {
+      playBurst(0.08)
+      return () => {
+        burstCtxRef.current?.revert()
+      }
+    }
+
+    // Otherwise, this is initial page load and curtain loader is still active:
+    // Hold in hidden burst state until curtains part
+    setHiddenState()
+
+    const handleLoaderDone = () => {
+      playBurst(0)
+    }
+
     window.addEventListener('raynor:loader-done', handleLoaderDone, { once: true })
 
     const safetyTimer = setTimeout(() => {
-      if (!hasRevealed) {
+      if (!hasRevealedRef.current) {
         handleLoaderDone()
       }
     }, 4200)
@@ -364,7 +445,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
         const isDone =
           window.__RAYNOR_LOADER_DONE__ ||
           document.documentElement.getAttribute('data-loader-done') === 'true'
-        if (isDone || hasRevealed) {
+        if (isDone && hasRevealedRef.current) {
           showAllInstantly()
         }
       }
@@ -377,7 +458,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
       clearTimeout(safetyTimer)
       burstCtxRef.current?.revert()
     }
-  }, [slideIndex, perfumeId])
+  }, [isActive, slideIndex, perfumeId])
 
   return (
     <div
@@ -503,17 +584,8 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
                 <div
                   ref={bottleRef}
                   className="hero-bottle"
-                  onClick={onSpritz}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      onSpritz()
-                    }
-                  }}
-                  aria-label="Experience After Glow spray atomizer"
-                  title="Click to experience After Glow"
+                  aria-label="RAYNOR After Glow Flacon"
+                  title="RAYNOR After Glow Flacon"
                 >
                   <img src="/images/perfume/after_glow/bottle.webp" alt="RAYNOR After Glow Flacon" />
                 </div>
@@ -588,17 +660,8 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
                 <div
                   ref={bottleRef}
                   className="hero-bottle"
-                  onClick={onSpritz}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      onSpritz()
-                    }
-                  }}
-                  aria-label="Experience First Light spray atomizer"
-                  title="Click to experience First Light"
+                  aria-label="RAYNOR First Light Flacon"
+                  title="RAYNOR First Light Flacon"
                 >
                   <img src="/images/perfume/first_light/bottle.webp" alt="RAYNOR First Light Flacon" />
                 </div>

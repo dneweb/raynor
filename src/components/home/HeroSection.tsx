@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { X, ShoppingBag, Sparkles, Check, ArrowRight } from 'lucide-react'
-import { useAudioExperience } from '../../hooks/useAudioExperience'
 import { HeroSlide } from './HeroSlide'
 
 // Safe lag-smoothing: clamp jumps when returning from background tabs without timeline breakdown
@@ -114,8 +113,6 @@ export const HeroSection: React.FC = () => {
   const slide2StageWrapRef = useRef<HTMLDivElement>(null)
   const slide2TitleWrapRef = useRef<HTMLDivElement>(null)
 
-  const { playSpritz, playVelvetClick, playGoldChime } = useAudioExperience()
-
   // State
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const currentSlideRef = useRef<number>(0)
@@ -152,7 +149,6 @@ export const HeroSection: React.FC = () => {
       isAnimatingRef.current = true
       currentSlideRef.current = targetIndex
       setCurrentSlide(targetIndex)
-      playVelvetClick()
 
       // Ensure active note is relevant to the target perfume
       const targetPerfumeNotes = perfumesData[targetIndex].notes.map((n) => n.name)
@@ -207,7 +203,7 @@ export const HeroSection: React.FC = () => {
         }
       }
     },
-    [activeNote, playVelvetClick]
+    [activeNote]
   )
 
   // Responsive alignment on resize
@@ -345,7 +341,6 @@ export const HeroSection: React.FC = () => {
             className="hero-mobile-toggle-btn"
             onClick={() => {
               setIsDrawerOpen(true)
-              playVelvetClick()
             }}
             aria-label="Open Navigation Menu"
           >
@@ -385,7 +380,6 @@ export const HeroSection: React.FC = () => {
         <div className="hero-header-actions">
           <button
             className="hero-action-btn hero-search-btn"
-            onClick={playVelvetClick}
             aria-label="Search Fragrances"
           >
             SEARCH
@@ -395,7 +389,6 @@ export const HeroSection: React.FC = () => {
             className="hero-action-btn hero-cart-btn"
             onClick={() => {
               setIsCartOpen(true)
-              playGoldChime()
             }}
             aria-label={`Shopping Bag (${cartCount} items)`}
           >
@@ -409,7 +402,6 @@ export const HeroSection: React.FC = () => {
             className="hero-menu-toggle"
             onClick={() => {
               setIsDrawerOpen(true)
-              playVelvetClick()
             }}
             aria-label="Open Navigation Menu"
           >
@@ -430,7 +422,7 @@ export const HeroSection: React.FC = () => {
           slideIndex={0}
           perfumeId="first_light"
           activeNote={activeNote}
-          onSpritz={playSpritz}
+          isActive={currentSlide === 0}
           stageWrapRef={slide1StageWrapRef}
           titleWrapRef={slide1TitleWrapRef}
         />
@@ -440,7 +432,7 @@ export const HeroSection: React.FC = () => {
           slideIndex={1}
           perfumeId="after_glow"
           activeNote={activeNote}
-          onSpritz={playSpritz}
+          isActive={currentSlide === 1}
           stageWrapRef={slide2StageWrapRef}
           titleWrapRef={slide2TitleWrapRef}
         />
@@ -464,8 +456,6 @@ export const HeroSection: React.FC = () => {
         <button
           className="hero-cta-btn"
           onClick={() => {
-            playSpritz()
-            playGoldChime()
             setIsCartOpen(true)
           }}
           aria-label={`Explore ${currentPerfume.name} and order`}
@@ -498,7 +488,6 @@ export const HeroSection: React.FC = () => {
                 key={note.name}
                 onClick={() => {
                   setActiveNote(note.name)
-                  playVelvetClick()
                 }}
                 className="hero-notes-tracker-item"
                 role="button"
@@ -507,7 +496,6 @@ export const HeroSection: React.FC = () => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
                     setActiveNote(note.name)
-                    playVelvetClick()
                   }
                 }}
                 aria-label={`Select ${note.name} note`}
@@ -569,7 +557,6 @@ export const HeroSection: React.FC = () => {
               className="hero-drawer-close"
               onClick={() => {
                 setIsDrawerOpen(false)
-                playVelvetClick()
               }}
               aria-label="Close Navigation Menu"
             >
@@ -622,7 +609,6 @@ export const HeroSection: React.FC = () => {
                     onClick={() => {
                       setDrawerActiveNote(note.name)
                       setActiveNote(note.name)
-                      playVelvetClick()
                     }}
                   >
                     <span
@@ -668,7 +654,6 @@ export const HeroSection: React.FC = () => {
                 setCartCount((prev) => prev + 1)
                 setIsDrawerOpen(false)
                 setIsCartOpen(true)
-                playGoldChime()
               }}
             >
               ADD TO BAG
@@ -709,7 +694,6 @@ export const HeroSection: React.FC = () => {
               className="hero-drawer-close"
               onClick={() => {
                 setIsCartOpen(false)
-                playVelvetClick()
               }}
               aria-label="Close Shopping Bag"
             >
@@ -787,7 +771,6 @@ export const HeroSection: React.FC = () => {
           <button
             className="hero-checkout-btn"
             onClick={() => {
-              playGoldChime()
               alert(`Thank you for choosing Raynor Haute Parfumerie. Checkout is connecting with ${currentPerfume.flaconTitle}...`)
             }}
           >
