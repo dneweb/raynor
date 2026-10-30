@@ -276,9 +276,9 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
             { ref: sageRef,         x: 40,   y: 50,   delay: 0.02 },
             { ref: lemonRef,        x: 60,   y: 10,   delay: 0.05 },
             { ref: cinnamonRef,     x: 50,   y: -40,  delay: 0.00 },
-            { ref: rosewoodRef,     x: -60,  y: 40,   delay: 0.03 },
-            { ref: patchouliRef,    x: -50,  y: -30,  delay: 0.07 },
-            { ref: amberChunkRef,   x: -30,  y: -40,  delay: 0.09 },
+            { ref: amberChunkRef,   x: -60,  y: 40,   delay: 0.03 },
+            { ref: patchouliRef,    x: -50,  y: -20,  delay: 0.06 },
+            { ref: rosewoodRef,     x: -40,  y: -50,  delay: 0.08 },
           ]
 
     const showAllInstantly = () => {
@@ -475,7 +475,15 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
                   <img src="/images/perfume/after_glow/cinnamon.webp" alt="Spiced Ceylon Cinnamon" />
                 </div>
 
-                {/* 4. Smoked Velvet Rosewood Bark (Northeast / 2 o'clock) */}
+                {/* 4. Luminous Amber Crystal Resin (Northeast / 2 o'clock) */}
+                <div
+                  ref={amberChunkRef}
+                  className={`hero-stage-item hero-afterglow-amber ${activeNote === 'Amber' ? 'active-highlight' : ''}`}
+                >
+                  <img src="/images/perfume/first_light/amber_chunk.webp" alt="Warm Amber Resin Chunk" />
+                </div>
+
+                {/* 5. Smoked Velvet Rosewood Bark (South-Southeast / 5:30 o'clock) */}
                 <div
                   ref={rosewoodRef}
                   className={`hero-stage-item hero-afterglow-rosewood ${activeNote === 'Rosewood' ? 'active-highlight' : ''}`}
@@ -483,20 +491,12 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
                   <img src="/images/perfume/after_glow/rosewood.webp" alt="Smoked Velvet Rosewood" />
                 </div>
 
-                {/* 5. Aromatic Dark Patchouli (Southeast / 4:30 o'clock) */}
+                {/* 6. Aromatic Dark Patchouli (Southeast / 4:00 o'clock) */}
                 <div
                   ref={patchouliRef}
                   className={`hero-stage-item hero-afterglow-patchouli ${activeNote === 'Patchouli' ? 'active-highlight' : ''}`}
                 >
                   <img src="/images/perfume/after_glow/patchouli.webp" alt="Earthy Dark Patchouli" />
-                </div>
-
-                {/* 6. Luminous Amber Crystal Resin (South-Southeast / 5:30 o'clock) */}
-                <div
-                  ref={amberChunkRef}
-                  className={`hero-stage-item hero-afterglow-amber ${activeNote === 'Amber' ? 'active-highlight' : ''}`}
-                >
-                  <img src="/images/perfume/first_light/amber_chunk.webp" alt="Warm Amber Resin Chunk" />
                 </div>
 
                 {/* 7. AFTER GLOW BOTTLE FLACON (Centerpiece Flacon, z-index: 30) */}

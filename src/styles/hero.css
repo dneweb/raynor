@@ -3,15 +3,7 @@
    Mobile-first & content-driven responsive architecture
    ========================================================================== */
 
-/* Outer scroll wrapper for GSAP pinned horizontal scroll */
-.hero-scroll-wrapper {
-  position: relative;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-/* Hero Container */
+/* Hero Container — Full-Bleed 100vh Luxury Carousel Stage */
 .hero-container {
   position: relative;
   width: 100vw;
@@ -447,9 +439,9 @@
    Emerging gracefully from behind bottle chrome left shoulder. */
 .hero-leaf-on-r {
   position: absolute !important;
-  left: 9%;
-  top: -2%;
-  width: 35%;
+  left: 16%;
+  top: 6%;
+  width: 23%;
   aspect-ratio: 1.43;
   z-index: 10;
   transform: rotate(-18deg);
@@ -548,12 +540,12 @@
    Warm crystalline amber resin grounded and clearly visible at the flacon base. */
 .hero-amber-chunk-bottom {
   position: absolute !important;
-  left: 7%;
-  top: 80%;
+  left: 6%;
+  top: 77%;
   width: 28%;
   aspect-ratio: 1.08;
   z-index: 12;
-  transform: rotate(-10deg);
+  transform: rotate(0deg);
   transform-origin: center center;
 }
 
@@ -561,7 +553,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 10px 24px rgba(212, 139, 40, 0.55)) drop-shadow(6px 12px 20px rgba(0, 0, 0, 0.22));
+  transform: rotate(180deg);
+  filter: drop-shadow(0 10px 24px rgba(212, 139, 40, 0.55)) drop-shadow(-6px 12px 20px rgba(0, 0, 0, 0.22));
 }
 
 /* 7. White Cashmere Musk Blossom — 5:30 o'clock (S-SE)
@@ -658,33 +651,33 @@
   filter: drop-shadow(-12px 18px 28px rgba(0, 0, 0, 0.32));
 }
 
-/* 4. Smoked Velvet Rosewood Bark — 2 o'clock (NE)
-   Majestic architectural bark rising behind right shoulder. */
-.hero-afterglow-rosewood {
+/* 4. Luminous Amber Resin Crystal — 2 o'clock (NE)
+   Warm golden crystalline chunk floating gracefully behind right shoulder. */
+.hero-afterglow-amber {
   position: absolute !important;
-  left: 55%;
+  left: 58%;
   top: 8%;
-  width: 52%;
-  aspect-ratio: 1.5;
+  width: 32%;
+  aspect-ratio: 1.46;
   z-index: 10;
   transform: rotate(16deg);
   transform-origin: 15% 75%;
 }
 
-.hero-afterglow-rosewood img {
+.hero-afterglow-amber img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(16px 22px 34px rgba(0, 0, 0, 0.30));
+  filter: drop-shadow(0 10px 24px rgba(212, 139, 40, 0.55)) drop-shadow(10px 16px 26px rgba(0, 0, 0, 0.28));
 }
 
-/* 5. Aromatic Dark Patchouli — 4:30 o'clock (SE)
+/* 5. Aromatic Dark Patchouli — 4:00 o'clock (SE)
    Lush green leaves with delicate purple blossoms at the lower right. */
 .hero-afterglow-patchouli {
   position: absolute !important;
-  left: 55%;
-  top: 51%;
-  width: 48%;
+  left: 54%;
+  top: 48%;
+  width: 46%;
   aspect-ratio: 1.5;
   z-index: 11;
   transform: rotate(-6deg);
@@ -698,24 +691,24 @@
   filter: drop-shadow(14px 18px 28px rgba(0, 0, 0, 0.28));
 }
 
-/* 6. Luminous Amber Resin Crystal — 5:30 o'clock (S-SE)
-   Warm golden crystalline chunk clearly visible at the base corner. */
-.hero-afterglow-amber {
+/* 6. Smoked Velvet Rosewood Bark — 5:30 o'clock (S-SE)
+   Majestic architectural bark anchored at lower-right flacon base under Patchouli. */
+.hero-afterglow-rosewood {
   position: absolute !important;
-  left: 62%;
-  top: 77%;
-  width: 28%;
-  aspect-ratio: 1.46;
-  z-index: 12;
-  transform: rotate(10deg);
-  transform-origin: center center;
+  left: 49%;
+  top: 67%;
+  width: 52%;
+  aspect-ratio: 1.5;
+  z-index: 10;
+  transform: rotate(8deg);
+  transform-origin: 20% 25%;
 }
 
-.hero-afterglow-amber img {
+.hero-afterglow-rosewood img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 10px 24px rgba(212, 139, 40, 0.55)) drop-shadow(8px 14px 22px rgba(0, 0, 0, 0.26));
+  filter: drop-shadow(14px 22px 34px rgba(0, 0, 0, 0.30));
 }
 
 /* Foreground Atmosphere */

@@ -224,69 +224,87 @@ export const HeroSection: React.FC = () => {
   }, [])
 
   // ─────────────────────────────────────────────────────────────────────────
-  // INSTANT SCROLL LISTENER: Even a slight scroll instantly switches slide
+  // FULL-SCREEN SLIDE SCROLL NAVIGATION (ZERO DEAD BLOCK)
+  // The hero section is 100vh locked. Scrolling down on First Light completes
+  // the hero carousel by switching to After Glow, with zero vertical page drag.
   // ─────────────────────────────────────────────────────────────────────────
   useEffect(() => {
     let accumulatedDelta = 0
     let resetTimer: ReturnType<typeof setTimeout> | null = null
 
     const handleWheel = (e: WheelEvent) => {
-      const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX
+      // Prevent browser from scrolling away or dragging page into any dead block
+      e.preventDefault()
 
+      const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX
       accumulatedDelta += delta
 
       if (resetTimer) clearTimeout(resetTimer)
       resetTimer = setTimeout(() => {
         accumulatedDelta = 0
-      }, 180)
+      }, 160)
 
-      // Scrolling down / swiping left just a bit (threshold: 16px) -> Next slide
+      // Scrolling down on Slide 0 -> Go to Slide 1 (After Glow)
       if (accumulatedDelta > 16 && currentSlideRef.current === 0) {
         accumulatedDelta = 0
         goToSlide(1)
       }
-      // Scrolling up / swiping right just a bit (threshold: -16px) -> Previous slide
+      // Scrolling up on Slide 1 -> Go to Slide 0 (First Light)
       else if (accumulatedDelta < -16 && currentSlideRef.current === 1) {
         accumulatedDelta = 0
         goToSlide(0)
       }
     }
 
-    window.addEventListener('wheel', handleWheel, { passive: true })
+    window.addEventListener('wheel', handleWheel, { passive: false })
     return () => {
       window.removeEventListener('wheel', handleWheel)
       if (resetTimer) clearTimeout(resetTimer)
     }
   }, [goToSlide])
 
-  // Touch swipe support for mobile
+  // Mobile touch swipe & drag handling with zero vertical bounce
   useEffect(() => {
     let touchStartX = 0
     let touchStartY = 0
+    let isTracking = false
 
     const handleTouchStart = (e: TouchEvent) => {
       touchStartX = e.touches[0].clientX
       touchStartY = e.touches[0].clientY
+      isTracking = true
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      // Prevent mobile browser from dragging the hero section away
+      if (isTracking && e.cancelable) {
+        e.preventDefault()
+      }
     }
 
     const handleTouchEnd = (e: TouchEvent) => {
+      if (!isTracking) return
+      isTracking = false
+
       const diffX = touchStartX - e.changedTouches[0].clientX
       const diffY = touchStartY - e.changedTouches[0].clientY
       const dominantDelta = Math.abs(diffX) >= Math.abs(diffY) ? diffX : diffY
 
-      // Quick swipe threshold: 24px
-      if (dominantDelta > 24 && currentSlideRef.current === 0) {
+      // Quick swipe threshold: 20px
+      if (dominantDelta > 20 && currentSlideRef.current === 0) {
         goToSlide(1)
-      } else if (dominantDelta < -24 && currentSlideRef.current === 1) {
+      } else if (dominantDelta < -20 && currentSlideRef.current === 1) {
         goToSlide(0)
       }
     }
 
     window.addEventListener('touchstart', handleTouchStart, { passive: true })
+    window.addEventListener('touchmove', handleTouchMove, { passive: false })
     window.addEventListener('touchend', handleTouchEnd, { passive: true })
 
     return () => {
       window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchmove', handleTouchMove)
       window.removeEventListener('touchend', handleTouchEnd)
     }
   }, [goToSlide])
