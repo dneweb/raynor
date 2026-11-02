@@ -22,7 +22,7 @@
 .hero-moving-track {
   position: absolute;
   inset: 0;
-  width: 200vw;
+  width: 300vw;
   height: 100%;
   height: 100dvh;
   display: flex;
@@ -160,21 +160,15 @@
   max-width: clamp(200px, 17vw, 250px);
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 1px 1.5px rgba(18, 22, 34, 0.45))
-          drop-shadow(0 3px 8px rgba(35, 25, 12, 0.22))
-          contrast(1.18)
-          brightness(0.94);
+  filter: drop-shadow(0 1px 1.5px rgba(18, 22, 34, 0.45)) drop-shadow(0 3px 8px rgba(35, 25, 12, 0.22)) contrast(1.18) brightness(0.94);
   transition: opacity var(--transition-fast, 0.25s ease),
-              transform var(--transition-fast, 0.25s ease),
-              filter var(--transition-fast, 0.25s ease);
+    transform var(--transition-fast, 0.25s ease),
+    filter var(--transition-fast, 0.25s ease);
 }
 
 .hero-logo:hover .hero-logo-img {
   opacity: 0.95;
-  filter: drop-shadow(0 2px 3px rgba(18, 22, 34, 0.52))
-          drop-shadow(0 5px 12px rgba(35, 25, 12, 0.28))
-          contrast(1.22)
-          brightness(0.96);
+  filter: drop-shadow(0 2px 3px rgba(18, 22, 34, 0.52)) drop-shadow(0 5px 12px rgba(35, 25, 12, 0.28)) contrast(1.22) brightness(0.96);
 }
 
 /* Header Right Actions */
@@ -315,6 +309,58 @@
 
 .hero-slide-after_glow .hero-eau-de-parfum {
   color: #481210 !important;
+}
+
+/* ==========================================================================
+   DUSK TYPOGRAPHY (Roasted Coffee / Dark Espresso / Warm Cocoa Umber)
+   Exact match to reference image
+   ========================================================================== */
+.hero-slide-dusk .hero-title-word {
+  top: 32% !important;
+  font-size: clamp(3.2rem, 17.5vw, 19.5rem) !important;
+  line-height: 0.8 !important;
+  letter-spacing: -0.02em !important;
+  background: linear-gradient(180deg, #260800 0%, #421a00 50%, #5c2500 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.hero-slide-dusk .hero-title-mobile-first,
+.hero-slide-dusk .hero-title-mobile-light {
+  background: linear-gradient(180deg, #260800 0%, #421a00 50%, #5c2500 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Single line horizontal positions for DUSK (DU and SK flanking the flacon) */
+.hero-slide-dusk .hero-text-fir {
+  /* Left word: DU */
+  top: 32% !important;
+  right: calc(50% + clamp(20px, 3.0vw, 60px)) !important;
+  left: auto !important;
+  text-align: right !important;
+}
+
+.hero-slide-dusk .hero-text-st {
+  /* Right word: SK */
+  top: 32% !important;
+  left: calc(50% + clamp(20px, 3.0vw, 60px)) !important;
+  right: auto !important;
+  text-align: left !important;
+}
+
+.hero-slide-dusk .hero-text-li,
+.hero-slide-dusk .hero-text-ght {
+  display: none !important;
+}
+
+.hero-slide-dusk .hero-eau-de-parfum {
+  color: #2b1005 !important;
+}
+
+/* Dusk Flacon is perfectly upright */
+.hero-slide-dusk .hero-bottle {
+  transform: rotate(0deg) translateZ(0) !important;
 }
 
 /* ==========================================================================
@@ -711,6 +757,157 @@
   filter: drop-shadow(14px 22px 34px rgba(0, 0, 0, 0.30));
 }
 
+/* ==========================================================================
+   DUSK BOTANICAL INGREDIENTS LAYOUT
+   Masterpiece Sculptural Composition matching attached reference image:
+   - Roasted Coffee Beans: Top (~11h), Mid (~9:30h), Bottom (~8h)
+   - Vanilla Elements: Orchid Flower (~3h), Curved Bean Pod (~5h)
+   - Floating Petals: Top-Right (~1h), Bottom-Left (~7h)
+   ========================================================================== */
+
+/* 1. Roasted Coffee Bean Top — 11 o'clock (NW) - replaces top mandarin */
+.hero-dusk-bean-1,
+.hero-dusk-bean-top {
+  position: absolute !important;
+  left: 18%;
+  top: 9%;
+  width: 17%;
+  aspect-ratio: 1.5;
+  z-index: 12;
+  transform: rotate(-38deg);
+  transform-origin: center center;
+}
+
+.hero-dusk-bean-1 img,
+.hero-dusk-bean-top img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-8px 12px 20px rgba(0, 0, 0, 0.28));
+}
+
+/* 2. Roasted Coffee Bean Mid — 9:30 o'clock (W) - replaces orange */
+.hero-dusk-bean-2,
+.hero-dusk-bean-mid {
+  position: absolute !important;
+  left: 27%;
+  top: 41%;
+  width: 13%;
+  aspect-ratio: 1.5;
+  z-index: 12;
+  transform: rotate(26deg);
+  transform-origin: center center;
+}
+
+.hero-dusk-bean-2 img,
+.hero-dusk-bean-mid img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-6px 10px 16px rgba(0, 0, 0, 0.26));
+}
+
+/* 3. Roasted Coffee Bean Bottom — 8 o'clock (SW) - replaces bottom mandarin */
+.hero-dusk-bean-3,
+.hero-dusk-bean-bottom {
+  position: absolute !important;
+  left: 12%;
+  top: 61%;
+  width: 18%;
+  aspect-ratio: 1.5;
+  z-index: 12;
+  transform: rotate(34deg);
+  transform-origin: center center;
+}
+
+.hero-dusk-bean-3 img,
+.hero-dusk-bean-bottom img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-10px 16px 24px rgba(0, 0, 0, 0.30));
+}
+
+/* 4. White Orchid Musk Flower — 2 o'clock (NE) - replaces bergamot */
+.hero-dusk-musk,
+.hero-dusk-flower {
+  position: absolute !important;
+  left: 56%;
+  top: 25%;
+  width: 38%;
+  aspect-ratio: 1.5;
+  z-index: 12;
+  transform: rotate(-6deg);
+  transform-origin: 15% 75%;
+}
+
+.hero-dusk-musk img,
+.hero-dusk-flower img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(14px 18px 28px rgba(0, 0, 0, 0.22));
+}
+
+/* 5. Rich Vanilla Bean Pods — 4:30 o'clock (SE) - replaces lemon */
+.hero-dusk-vanilla,
+.hero-dusk-pod {
+  position: absolute !important;
+  left: 58%;
+  top: 67%;
+  width: 44%;
+  aspect-ratio: 3.0;
+  z-index: 11;
+  transform: rotate(4deg);
+  transform-origin: 20% 50%;
+}
+
+.hero-dusk-vanilla img,
+.hero-dusk-pod img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(10px 16px 24px rgba(0, 0, 0, 0.28));
+}
+
+/* 6. Floating Sensual Petal Top — 1 o'clock (NE) */
+.hero-dusk-petal-top {
+  position: absolute !important;
+  left: 67%;
+  top: 11%;
+  width: 13%;
+  aspect-ratio: 1.48;
+  z-index: 11;
+  transform: rotate(8deg);
+  transform-origin: center center;
+}
+
+.hero-dusk-petal-top img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(6px 10px 16px rgba(0, 0, 0, 0.16));
+}
+
+/* 7. Floating Sensual Petal Bottom — 7 o'clock (SW) */
+.hero-dusk-petal-bottom {
+  position: absolute !important;
+  left: 7%;
+  top: 78%;
+  width: 15%;
+  aspect-ratio: 1.47;
+  z-index: 11;
+  transform: rotate(-8deg);
+  transform-origin: center center;
+}
+
+.hero-dusk-petal-bottom img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(-6px 10px 16px rgba(0, 0, 0, 0.18));
+}
+
 /* Foreground Atmosphere */
 .hero-bokeh {
   position: absolute;
@@ -817,6 +1014,22 @@
 .hero-active-slide-1 .hero-cta-btn:hover {
   background: linear-gradient(180deg, #3d0c0a 0%, #681c18 50%, #9e362e 100%) !important;
   box-shadow: 0 14px 34px rgba(44, 9, 7, 0.55), 0 4px 10px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Dusk Slide Matching CTA Theme (Warm Espresso Brown) */
+.hero-active-slide-2 .hero-cta-btn {
+  background: linear-gradient(180deg, #260800 0%, #3e1800 50%, #592501 100%) !important;
+  box-shadow: 0 8px 26px rgba(38, 8, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+.hero-active-slide-2 .hero-cta-btn:hover {
+  background: linear-gradient(180deg, #360d01 0%, #4f2102 50%, #6e2e01 100%) !important;
+  box-shadow: 0 14px 34px rgba(38, 8, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Dusk Slide Matching Bokeh */
+.hero-active-slide-2 .hero-bokeh {
+  background-image: url('/images/perfume/dusk/blurred.webp') !important;
 }
 
 /* ==========================================================================

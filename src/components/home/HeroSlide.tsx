@@ -3,7 +3,7 @@ import gsap from 'gsap'
 
 interface HeroSlideProps {
   slideIndex: number
-  perfumeId: 'first_light' | 'after_glow'
+  perfumeId: 'first_light' | 'after_glow' | 'dusk'
   activeNote: string
   isActive?: boolean
   stageWrapRef?: React.RefObject<HTMLDivElement | null>
@@ -45,6 +45,13 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
   const patchouliRef = useRef<HTMLDivElement>(null)
   const rosewoodRef = useRef<HTMLDivElement>(null)
 
+  // Dusk Botanical Refs
+  const duskBean1Ref = useRef<HTMLDivElement>(null)
+  const duskBean2Ref = useRef<HTMLDivElement>(null)
+  const duskBean3Ref = useRef<HTMLDivElement>(null)
+  const duskMuskRef = useRef<HTMLDivElement>(null)
+  const duskVanillaRef = useRef<HTMLDivElement>(null)
+
   // Guard flags and animation context refs for entrance burst & parallax synchronization
   const isBurstingRef = useRef(false)
   const hasRevealedRef = useRef(false)
@@ -72,7 +79,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
         ease: 'sine.inOut',
       })
 
-      // 2. Shared / First Light Elements
+      // 2. Botanical Elements Idle Floating
       if (perfumeId === 'first_light') {
         gsap.to(leafOnRRef.current, {
           rotation: '+=1.0',
@@ -135,6 +142,51 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
           yoyo: true,
           ease: 'sine.inOut',
           delay: 0.7,
+        })
+      } else if (perfumeId === 'dusk') {
+        gsap.to(duskBean1Ref.current, {
+          rotation: '+=1.0',
+          duration: 4.8,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.1,
+        })
+
+        gsap.to(duskBean2Ref.current, {
+          rotation: '-=0.8',
+          duration: 5.2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.2,
+        })
+
+        gsap.to(duskBean3Ref.current, {
+          rotation: '+=0.9',
+          duration: 5.0,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.5,
+        })
+
+        gsap.to(duskMuskRef.current, {
+          rotation: '-=0.7',
+          duration: 4.6,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.3,
+        })
+
+        gsap.to(duskVanillaRef.current, {
+          rotation: '+=0.6',
+          duration: 4.8,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 0.4,
         })
       } else {
         // After Glow Elements Idle Floating
@@ -280,8 +332,25 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
   // ─────────────────────────────────────────────────────────────────────────
   useEffect(() => {
     const botanicals =
-      perfumeId === 'first_light'
+      perfumeId === 'after_glow'
         ? [
+            { ref: sageRef,         x: 40,   y: 50,   delay: 0.02 },
+            { ref: lemonRef,        x: 60,   y: 10,   delay: 0.05 },
+            { ref: cinnamonRef,     x: 50,   y: -40,  delay: 0.00 },
+            { ref: amberChunkRef,   x: -60,  y: 40,   delay: 0.03 },
+            { ref: patchouliRef,    x: -50,  y: -20,  delay: 0.06 },
+            { ref: rosewoodRef,     x: -40,  y: -50,  delay: 0.08 },
+          ]
+        : perfumeId === 'dusk'
+        ? [
+            { ref: duskBean1Ref,    x: 40,   y: 60,   delay: 0.02 },
+            { ref: duskBean2Ref,    x: 60,   y: 10,   delay: 0.00 },
+            { ref: duskBean3Ref,    x: 50,   y: -40,  delay: 0.06 },
+            { ref: duskMuskRef,     x: -60,  y: 40,   delay: 0.03 },
+            { ref: duskVanillaRef,  x: -70,  y: -10,  delay: 0.05 },
+          ]
+        : [
+            // First Light botanicals
             { ref: leafOnRRef,    x: 40,   y: 60,   delay: 0.02 },
             { ref: orangeRef,     x: 60,   y: 10,   delay: 0.00 },
             { ref: twoLeafsRef,   x: 50,   y: -40,  delay: 0.06 },
@@ -289,14 +358,6 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
             { ref: lemonRef,      x: -70,  y: -10,  delay: 0.05 },
             { ref: amberChunkRef, x: 20,   y: -50,  delay: 0.08 },
             { ref: muskRef,       x: -40,  y: -50,  delay: 0.09 },
-          ]
-        : [
-            { ref: sageRef,         x: 40,   y: 50,   delay: 0.02 },
-            { ref: lemonRef,        x: 60,   y: 10,   delay: 0.05 },
-            { ref: cinnamonRef,     x: 50,   y: -40,  delay: 0.00 },
-            { ref: amberChunkRef,   x: -60,  y: 40,   delay: 0.03 },
-            { ref: patchouliRef,    x: -50,  y: -20,  delay: 0.06 },
-            { ref: rosewoodRef,     x: -40,  y: -50,  delay: 0.08 },
           ]
 
     const setHiddenState = () => {
@@ -495,6 +556,22 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
               <div className="hero-title-word hero-title-mobile-light">GLOW</div>
             </div>
           </>
+        ) : perfumeId === 'dusk' ? (
+          <>
+            {/* Desktop split typography: DU on left, SK on right flanking the centerpiece bottle */}
+            <div ref={textFirRef} className="hero-title-word hero-text-fir">
+              DU
+            </div>
+            <div ref={textStRef} className="hero-title-word hero-text-st">
+              SK
+            </div>
+
+            {/* Mobile unified typography */}
+            <div className="hero-title-mobile" aria-hidden="true">
+              <div className="hero-title-word hero-title-mobile-first">DU</div>
+              <div className="hero-title-word hero-title-mobile-light">SK</div>
+            </div>
+          </>
         ) : (
           <>
             {/* Desktop split words: FIR ST LI GHT */}
@@ -588,6 +665,62 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
                   title="RAYNOR After Glow Flacon"
                 >
                   <img src="/images/perfume/after_glow/bottle.webp" alt="RAYNOR After Glow Flacon" />
+                </div>
+              </>
+            ) : perfumeId === 'dusk' ? (
+              /* ========================================================
+                 DUSK CENTERPIECE INGREDIENTS
+                 Coffee Beans, White Orchid Musk & Creamy Vanilla Pods
+                 ======================================================== */
+              <>
+                {/* 1. Top Roasted Coffee Bean (Northwest / 11 o'clock - replaces top mandarin) */}
+                <div
+                  ref={duskBean1Ref}
+                  className={`hero-stage-item hero-dusk-bean-1 ${activeNote === 'Coffee' ? 'active-highlight' : ''}`}
+                >
+                  <img src="/images/perfume/dusk/coffee-bean-1.webp" alt="Roasted Coffee Bean" />
+                </div>
+
+                {/* 2. Middle Roasted Coffee Bean (West / 9:30 o'clock - replaces orange) */}
+                <div
+                  ref={duskBean2Ref}
+                  className={`hero-stage-item hero-dusk-bean-2 ${activeNote === 'Coffee' ? 'active-highlight' : ''}`}
+                >
+                  <img src="/images/perfume/dusk/coffee-bean-2.webp" alt="Roasted Coffee Bean" />
+                </div>
+
+                {/* 3. Bottom Roasted Coffee Bean (Southwest / 7:30 o'clock - replaces bottom mandarin) */}
+                <div
+                  ref={duskBean3Ref}
+                  className={`hero-stage-item hero-dusk-bean-3 ${activeNote === 'Coffee' ? 'active-highlight' : ''}`}
+                >
+                  <img src="/images/perfume/dusk/coffee-bean-3.webp" alt="Roasted Coffee Bean" />
+                </div>
+
+                {/* 4. White Orchid Musk Flower (Northeast / 2 o'clock - replaces bergamot) */}
+                <div
+                  ref={duskMuskRef}
+                  className={`hero-stage-item hero-dusk-musk ${activeNote === 'Musk' ? 'active-highlight' : ''}`}
+                >
+                  <img src="/images/perfume/dusk/musk.webp" alt="Sensual White Orchid Musk" />
+                </div>
+
+                {/* 5. Rich Vanilla Bean Pods (Southeast / 4:30 o'clock - replaces lemon) */}
+                <div
+                  ref={duskVanillaRef}
+                  className={`hero-stage-item hero-dusk-vanilla ${activeNote === 'Vanilla' ? 'active-highlight' : ''}`}
+                >
+                  <img src="/images/perfume/dusk/vanilla.webp" alt="Creamy Vanilla Pods" />
+                </div>
+
+                {/* 6. DUSK BOTTLE FLACON (Centerpiece Flacon, z-index: 30) */}
+                <div
+                  ref={bottleRef}
+                  className="hero-bottle"
+                  aria-label="RAYNOR Dusk Flacon"
+                  title="RAYNOR Dusk Flacon"
+                >
+                  <img src="/images/perfume/dusk/bottle.webp" alt="RAYNOR Dusk Flacon" />
                 </div>
               </>
             ) : (
