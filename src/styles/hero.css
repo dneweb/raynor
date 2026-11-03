@@ -325,8 +325,7 @@
   -webkit-text-fill-color: transparent !important;
 }
 
-.hero-slide-dusk .hero-title-mobile-first,
-.hero-slide-dusk .hero-title-mobile-light {
+.hero-slide-dusk .hero-title-mobile-dusk {
   background: linear-gradient(180deg, #260800 0%, #421a00 50%, #5c2500 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
@@ -358,10 +357,6 @@
   color: #2b1005 !important;
 }
 
-/* Dusk Flacon is perfectly upright */
-.hero-slide-dusk .hero-bottle {
-  transform: rotate(0deg) translateZ(0) !important;
-}
 
 /* ==========================================================================
    CENTERPIECE SCULPTURE STAGE (UNIFIED 3D STAGE)
@@ -401,7 +396,7 @@
 .hero-stage-item {
   position: absolute !important;
   pointer-events: none;
-  transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   /* Pre-promote all botanical elements to their own compositor layers.
      This means zero layer-promotion jank on the first GSAP tick. */
   will-change: transform, opacity;
@@ -412,8 +407,6 @@
 
 .hero-stage-item.active-highlight {
   filter: drop-shadow(0 0 24px rgba(212, 139, 40, 0.8)) drop-shadow(0 0 48px rgba(255, 220, 120, 0.55)) !important;
-  transform: scale(1.06) !important;
-  z-index: 25 !important;
 }
 
 /* 1. The Big Centerpiece Bottle: STRICT FOREGROUND — always on top of all ingredients */
@@ -769,13 +762,11 @@
 .hero-dusk-bean-1,
 .hero-dusk-bean-top {
   position: absolute !important;
-  left: 18%;
-  top: 9%;
-  width: 17%;
+  left: 6%;
+  top: 6%;
+  width: 19%;
   aspect-ratio: 1.5;
-  z-index: 12;
-  transform: rotate(-38deg);
-  transform-origin: center center;
+  z-index: 15;
 }
 
 .hero-dusk-bean-1 img,
@@ -783,6 +774,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform: rotate(-38deg);
+  transform-origin: center center;
   filter: drop-shadow(-8px 12px 20px rgba(0, 0, 0, 0.28));
 }
 
@@ -790,13 +783,11 @@
 .hero-dusk-bean-2,
 .hero-dusk-bean-mid {
   position: absolute !important;
-  left: 27%;
-  top: 41%;
-  width: 13%;
+  left: 14%;
+  top: 40%;
+  width: 14%;
   aspect-ratio: 1.5;
-  z-index: 12;
-  transform: rotate(26deg);
-  transform-origin: center center;
+  z-index: 32;
 }
 
 .hero-dusk-bean-2 img,
@@ -804,6 +795,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform: rotate(26deg);
+  transform-origin: center center;
   filter: drop-shadow(-6px 10px 16px rgba(0, 0, 0, 0.26));
 }
 
@@ -811,13 +804,11 @@
 .hero-dusk-bean-3,
 .hero-dusk-bean-bottom {
   position: absolute !important;
-  left: 12%;
-  top: 61%;
-  width: 18%;
+  left: 0%;
+  top: 64%;
+  width: 22%;
   aspect-ratio: 1.5;
-  z-index: 12;
-  transform: rotate(34deg);
-  transform-origin: center center;
+  z-index: 15;
 }
 
 .hero-dusk-bean-3 img,
@@ -825,6 +816,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform: rotate(34deg);
+  transform-origin: center center;
   filter: drop-shadow(-10px 16px 24px rgba(0, 0, 0, 0.30));
 }
 
@@ -837,8 +830,6 @@
   width: 38%;
   aspect-ratio: 1.5;
   z-index: 12;
-  transform: rotate(-6deg);
-  transform-origin: 15% 75%;
 }
 
 .hero-dusk-musk img,
@@ -846,6 +837,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform: rotate(-6deg);
+  transform-origin: 15% 75%;
   filter: drop-shadow(14px 18px 28px rgba(0, 0, 0, 0.22));
 }
 
@@ -858,8 +851,6 @@
   width: 44%;
   aspect-ratio: 3.0;
   z-index: 11;
-  transform: rotate(4deg);
-  transform-origin: 20% 50%;
 }
 
 .hero-dusk-vanilla img,
@@ -867,6 +858,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform: rotate(4deg);
+  transform-origin: 20% 50%;
   filter: drop-shadow(10px 16px 24px rgba(0, 0, 0, 0.28));
 }
 
@@ -1345,6 +1338,11 @@
     top: 14%;
   }
 
+  .hero-slide-dusk .hero-text-fir,
+  .hero-slide-dusk .hero-text-st {
+    top: 30% !important;
+  }
+
   .hero-text-li,
   .hero-text-ght {
     top: 52%;
@@ -1490,6 +1488,24 @@
     top: 34.2%;
   }
 
+  /* Dusk Unified Title on Mobile — Pulled upper into the red-marked area with increased size */
+  .hero-slide-dusk .hero-title-mobile-dusk {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(5.4rem, 26.5vw, 8.0rem) !important;
+    letter-spacing: 0.08em !important;
+    line-height: 0.88 !important;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    top: 18.2% !important;
+    z-index: 6;
+  }
+
   /* Centerpiece Stage & Bottle on Mobile — Positioned at 47.3% matching reference */
   .hero-centerpiece-anchor {
     top: 47.3%;
@@ -1575,6 +1591,53 @@
     opacity: 0.95;
     pointer-events: none;
     z-index: 28;
+  }
+
+  /* Dusk Centerpiece Botanical Fine-Tuning on Mobile */
+  .hero-slide-dusk .hero-dusk-bean-1 {
+    left: 5% !important;
+    top: 9% !important;
+    width: 20% !important;
+  }
+
+  .hero-slide-dusk .hero-dusk-bean-2 {
+    left: 10% !important;
+    top: 41% !important;
+    width: 17% !important;
+  }
+
+  .hero-slide-dusk .hero-dusk-bean-3 {
+    left: 1% !important;
+    top: 63% !important;
+    width: 23% !important;
+  }
+
+  .hero-slide-dusk .hero-dusk-musk {
+    left: 53% !important;
+    top: 22% !important;
+    width: 44% !important;
+    z-index: 12 !important;
+  }
+
+  .hero-slide-dusk .hero-dusk-vanilla {
+    left: 56% !important;
+    top: 65% !important;
+    width: 48% !important;
+  }
+
+  /* Dusk Foreground Atmosphere Bokeh on Mobile — Architecture-Parity Dual Corner Slices */
+  .hero-active-slide-2 .hero-bokeh {
+    background-image:
+      url('/images/perfume/dusk/blurred_tl.webp'),
+      url('/images/perfume/dusk/blurred_br.webp') !important;
+    background-repeat: no-repeat, no-repeat !important;
+    background-position:
+      left top,
+      right bottom !important;
+    background-size:
+      clamp(130px, 36vw, 190px) auto,
+      clamp(180px, 52vw, 280px) auto !important;
+    opacity: 0.92 !important;
   }
 }
 

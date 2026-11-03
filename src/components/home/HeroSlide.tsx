@@ -249,8 +249,8 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
     // Smooth Mouse Movement Parallax (Desktop / Fine pointers)
     const isFinePointer = window.matchMedia('(pointer: fine)').matches
     let rafId = 0
-    let latestMouseX = 0
-    let latestMouseY = 0
+    let latestMouseX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0
+    let latestMouseY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0
 
     const dispatchParallax = () => {
       const isLoaderReady =
@@ -334,39 +334,39 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
     const botanicals =
       perfumeId === 'after_glow'
         ? [
-            { ref: sageRef,         x: 40,   y: 50,   delay: 0.02 },
-            { ref: lemonRef,        x: 60,   y: 10,   delay: 0.05 },
-            { ref: cinnamonRef,     x: 50,   y: -40,  delay: 0.00 },
-            { ref: amberChunkRef,   x: -60,  y: 40,   delay: 0.03 },
-            { ref: patchouliRef,    x: -50,  y: -20,  delay: 0.06 },
-            { ref: rosewoodRef,     x: -40,  y: -50,  delay: 0.08 },
+            { ref: sageRef,         delay: 0.02 },
+            { ref: lemonRef,        delay: 0.05 },
+            { ref: cinnamonRef,     delay: 0.00 },
+            { ref: amberChunkRef,   delay: 0.03 },
+            { ref: patchouliRef,    delay: 0.06 },
+            { ref: rosewoodRef,     delay: 0.08 },
           ]
         : perfumeId === 'dusk'
         ? [
-            { ref: duskBean1Ref,    x: 40,   y: 60,   delay: 0.02 },
-            { ref: duskBean2Ref,    x: 60,   y: 10,   delay: 0.00 },
-            { ref: duskBean3Ref,    x: 50,   y: -40,  delay: 0.06 },
-            { ref: duskMuskRef,     x: -60,  y: 40,   delay: 0.03 },
-            { ref: duskVanillaRef,  x: -70,  y: -10,  delay: 0.05 },
+            { ref: duskBean1Ref,    delay: 0.02 },
+            { ref: duskBean2Ref,    delay: 0.00 },
+            { ref: duskBean3Ref,    delay: 0.06 },
+            { ref: duskMuskRef,     delay: 0.03 },
+            { ref: duskVanillaRef,  delay: 0.05 },
           ]
         : [
             // First Light botanicals
-            { ref: leafOnRRef,    x: 40,   y: 60,   delay: 0.02 },
-            { ref: orangeRef,     x: 60,   y: 10,   delay: 0.00 },
-            { ref: twoLeafsRef,   x: 50,   y: -40,  delay: 0.06 },
-            { ref: bergamotRef,   x: -60,  y: 40,   delay: 0.03 },
-            { ref: lemonRef,      x: -70,  y: -10,  delay: 0.05 },
-            { ref: amberChunkRef, x: 20,   y: -50,  delay: 0.08 },
-            { ref: muskRef,       x: -40,  y: -50,  delay: 0.09 },
+            { ref: leafOnRRef,    delay: 0.02 },
+            { ref: orangeRef,     delay: 0.00 },
+            { ref: twoLeafsRef,   delay: 0.06 },
+            { ref: bergamotRef,   delay: 0.03 },
+            { ref: lemonRef,      delay: 0.05 },
+            { ref: amberChunkRef, delay: 0.08 },
+            { ref: muskRef,       delay: 0.09 },
           ]
 
     const setHiddenState = () => {
       if (bottleRef.current) {
         gsap.set(bottleRef.current, { opacity: 0, scale: 0.82, y: 40, force3D: true })
       }
-      botanicals.forEach(({ ref, x, y }) => {
+      botanicals.forEach(({ ref }) => {
         if (ref.current) {
-          gsap.set(ref.current, { opacity: 0, scale: 0.4, x, y, force3D: true })
+          gsap.set(ref.current, { opacity: 0, scale: 0.35, force3D: true })
         }
       })
     }
@@ -377,10 +377,8 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
         gsap.set(bottleRef.current, {
           opacity: 1,
           scale: 1,
-          x: 0,
           y: 0,
           force3D: true,
-          clearProps: 'opacity,scale,x,y',
         })
       }
       botanicals.forEach(({ ref }) => {
@@ -388,10 +386,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
           gsap.set(ref.current, {
             opacity: 1,
             scale: 1,
-            x: 0,
-            y: 0,
             force3D: true,
-            clearProps: 'opacity,scale,x,y',
           })
         }
       })
@@ -447,28 +442,24 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
               ease: 'power3.out',
               force3D: true,
               overwrite: 'auto',
-              clearProps: 'opacity,scale,y',
             },
             0
           )
         }
 
-        // 2. Botanical ingredients radial burst outward
-        botanicals.forEach(({ ref, x, y, delay }) => {
+        // 2. Botanical ingredients raise forward from small (behind) to big (foreground)
+        botanicals.forEach(({ ref, delay }) => {
           if (!ref.current) return
           tl.fromTo(
             ref.current,
-            { opacity: 0, scale: 0.4, x, y, force3D: true },
+            { opacity: 0, scale: 0.35, force3D: true },
             {
               opacity: 1,
               scale: 1,
-              x: 0,
-              y: 0,
-              duration: 1.1,
+              duration: 1.15,
               ease: 'power3.out',
               force3D: true,
               overwrite: 'auto',
-              clearProps: 'x,y,scale,opacity',
             },
             delay
           )
@@ -568,8 +559,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = ({
 
             {/* Mobile unified typography */}
             <div className="hero-title-mobile" aria-hidden="true">
-              <div className="hero-title-word hero-title-mobile-first">DU</div>
-              <div className="hero-title-word hero-title-mobile-light">SK</div>
+              <div className="hero-title-word hero-title-mobile-dusk">DUSK</div>
             </div>
           </>
         ) : (

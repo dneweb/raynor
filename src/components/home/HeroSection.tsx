@@ -143,8 +143,14 @@ export const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const currentSlideRef = useRef<number>(0)
   const isAnimatingRef = useRef<boolean>(false)
+  const lastTransitionTimeRef = useRef<number>(0)
 
   const [activeNote, setActiveNote] = useState<string>('Amber')
+  const activeNoteRef = useRef<string>('Amber')
+
+  useEffect(() => {
+    activeNoteRef.current = activeNote
+  }, [activeNote])
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
   const [cartCount, setCartCount] = useState<number>(1)
@@ -166,66 +172,72 @@ export const HeroSection: React.FC = () => {
   }, [])
 
   // ─────────────────────────────────────────────────────────────────────────
-  // FAST HORIZONTAL ON-SCROLL SLIDE SWITCHING
-  // Animates ONLY the name "FIRST LIGHT" / "AFTER GLOW" / "DUSK" and the bottle + floating elements
+  // FAST HORIZONTAL ON-SCROLL SLIDE SWITCHING (MOMENTUM-LOCKED, ZERO-SKIP)
   // ─────────────────────────────────────────────────────────────────────────
-  const goToSlide = useCallback(
-    (targetIndex: number) => {
-      if (isAnimatingRef.current || targetIndex === currentSlideRef.current) return
-      const prevIndex = currentSlideRef.current
-      isAnimatingRef.current = true
-      currentSlideRef.current = targetIndex
-      setCurrentSlide(targetIndex)
+  const goToSlide = useCallback((targetIndex: number) => {
+    const now = performance.now()
+    // Enforce 820ms minimum gesture lockout (620ms GSAP animation + 200ms momentum decay buffer)
+    if (
+      isAnimatingRef.current ||
+      targetIndex === currentSlideRef.current ||
+      now - lastTransitionTimeRef.current < 820
+    ) {
+      return
+    }
 
-      // Ensure active note is relevant to the target perfume
-      const targetPerfumeNotes = perfumesData[targetIndex].notes.map((n) => n.name)
-      if (!targetPerfumeNotes.includes(activeNote)) {
-        setActiveNote(targetPerfumeNotes[0])
+    const prevIndex = currentSlideRef.current
+    isAnimatingRef.current = true
+    lastTransitionTimeRef.current = now
+    currentSlideRef.current = targetIndex
+    setCurrentSlide(targetIndex)
+
+    // Ensure active note is relevant to the target perfume
+    const targetPerfumeNotes = perfumesData[targetIndex].notes.map((n) => n.name)
+    if (!targetPerfumeNotes.includes(activeNoteRef.current)) {
+      setActiveNote(targetPerfumeNotes[0])
+    }
+
+    const targetX = -targetIndex * window.innerWidth
+
+    const tl = gsap.timeline({
+      defaults: { duration: 0.62, ease: 'power2.inOut' },
+      onComplete: () => {
+        isAnimatingRef.current = false
+      },
+    })
+
+    // 1. Fast horizontal slide of moving track (typography + centerpiece stage)
+    tl.to(
+      movingTrackRef.current,
+      {
+        x: targetX,
+      },
+      0
+    )
+
+    // 2. Multi-plane depth parallax: bottle & floating elements move with slight offset
+    const stageWraps = [slide1StageWrapRef, slide2StageWrapRef, slide3StageWrapRef]
+    const titleWraps = [slide1TitleWrapRef, slide2TitleWrapRef, slide3TitleWrapRef]
+    const direction = targetIndex > prevIndex ? 1 : -1
+
+    stageWraps.forEach((wrapRef, idx) => {
+      if (!wrapRef.current) return
+      if (idx === targetIndex) {
+        tl.fromTo(wrapRef.current, { x: direction * 85 }, { x: 0 }, 0)
+      } else if (idx === prevIndex) {
+        tl.to(wrapRef.current, { x: -direction * 85 }, 0)
       }
+    })
 
-      const targetX = -targetIndex * window.innerWidth
-
-      const tl = gsap.timeline({
-        defaults: { duration: 0.62, ease: 'power2.inOut' },
-        onComplete: () => {
-          isAnimatingRef.current = false
-        },
-      })
-
-      // 1. Fast horizontal slide of moving track (typography + centerpiece stage)
-      tl.to(
-        movingTrackRef.current,
-        {
-          x: targetX,
-        },
-        0
-      )
-
-      // 2. Multi-plane depth parallax: bottle & floating elements move with slight offset
-      const stageWraps = [slide1StageWrapRef, slide2StageWrapRef, slide3StageWrapRef]
-      const titleWraps = [slide1TitleWrapRef, slide2TitleWrapRef, slide3TitleWrapRef]
-      const direction = targetIndex > prevIndex ? 1 : -1
-
-      stageWraps.forEach((wrapRef, idx) => {
-        if (!wrapRef.current) return
-        if (idx === targetIndex) {
-          tl.fromTo(wrapRef.current, { x: direction * 85 }, { x: 0 }, 0)
-        } else if (idx === prevIndex) {
-          tl.to(wrapRef.current, { x: -direction * 85 }, 0)
-        }
-      })
-
-      titleWraps.forEach((wrapRef, idx) => {
-        if (!wrapRef.current) return
-        if (idx === targetIndex) {
-          tl.fromTo(wrapRef.current, { x: direction * 40 }, { x: 0 }, 0)
-        } else if (idx === prevIndex) {
-          tl.to(wrapRef.current, { x: -direction * 40 }, 0)
-        }
-      })
-    },
-    [activeNote]
-  )
+    titleWraps.forEach((wrapRef, idx) => {
+      if (!wrapRef.current) return
+      if (idx === targetIndex) {
+        tl.fromTo(wrapRef.current, { x: direction * 40 }, { x: 0 }, 0)
+      } else if (idx === prevIndex) {
+        tl.to(wrapRef.current, { x: -direction * 40 }, 0)
+      }
+    })
+  }, [])
 
   // Responsive alignment on resize
   useEffect(() => {
@@ -241,9 +253,9 @@ export const HeroSection: React.FC = () => {
   }, [])
 
   // ─────────────────────────────────────────────────────────────────────────
-  // FULL-SCREEN SLIDE SCROLL NAVIGATION (ZERO DEAD BLOCK)
-  // The hero section is 100vh locked. Scrolling down cycles through slides,
-  // with zero vertical page drag.
+  // FULL-SCREEN SLIDE SCROLL NAVIGATION (ZERO DEAD BLOCK, ZERO ACCIDENTAL SKIPS)
+  // Uses kinetic momentum absorption: lingering trackpad inertia from a previous
+  // swipe is completely swallowed during the 820ms transition & decay window.
   // ─────────────────────────────────────────────────────────────────────────
   useEffect(() => {
     let accumulatedDelta = 0
@@ -253,21 +265,34 @@ export const HeroSection: React.FC = () => {
       // Prevent browser from scrolling away or dragging page into any dead block
       e.preventDefault()
 
+      const now = performance.now()
+      // If actively animating or in post-animation momentum cooldown, swallow and discard delta
+      if (isAnimatingRef.current || now - lastTransitionTimeRef.current < 820) {
+        accumulatedDelta = 0
+        return
+      }
+
       const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX
+
+      // Ignore microscopic trackpad jitter (< 2px)
+      if (Math.abs(delta) < 2) return
+
       accumulatedDelta += delta
 
       if (resetTimer) clearTimeout(resetTimer)
       resetTimer = setTimeout(() => {
         accumulatedDelta = 0
-      }, 160)
+      }, 140)
+
+      const WHEEL_THRESHOLD = 45 // Intentional scroll threshold (prevents micro-skips)
 
       // Scrolling down / right -> Next Slide
-      if (accumulatedDelta > 16 && currentSlideRef.current < perfumesData.length - 1) {
+      if (accumulatedDelta > WHEEL_THRESHOLD && currentSlideRef.current < perfumesData.length - 1) {
         accumulatedDelta = 0
         goToSlide(currentSlideRef.current + 1)
       }
       // Scrolling up / left -> Previous Slide
-      else if (accumulatedDelta < -16 && currentSlideRef.current > 0) {
+      else if (accumulatedDelta < -WHEEL_THRESHOLD && currentSlideRef.current > 0) {
         accumulatedDelta = 0
         goToSlide(currentSlideRef.current - 1)
       }
@@ -303,14 +328,17 @@ export const HeroSection: React.FC = () => {
       if (!isTracking) return
       isTracking = false
 
+      const now = performance.now()
+      if (isAnimatingRef.current || now - lastTransitionTimeRef.current < 820) return
+
       const diffX = touchStartX - e.changedTouches[0].clientX
       const diffY = touchStartY - e.changedTouches[0].clientY
       const dominantDelta = Math.abs(diffX) >= Math.abs(diffY) ? diffX : diffY
 
-      // Quick swipe threshold: 20px
-      if (dominantDelta > 20 && currentSlideRef.current < perfumesData.length - 1) {
+      // Quick swipe threshold: 30px
+      if (dominantDelta > 30 && currentSlideRef.current < perfumesData.length - 1) {
         goToSlide(currentSlideRef.current + 1)
-      } else if (dominantDelta < -20 && currentSlideRef.current > 0) {
+      } else if (dominantDelta < -30 && currentSlideRef.current > 0) {
         goToSlide(currentSlideRef.current - 1)
       }
     }
@@ -329,6 +357,9 @@ export const HeroSection: React.FC = () => {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const now = performance.now()
+      if (isAnimatingRef.current || now - lastTransitionTimeRef.current < 820) return
+
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') {
         if (currentSlideRef.current < perfumesData.length - 1) {
           goToSlide(currentSlideRef.current + 1)
